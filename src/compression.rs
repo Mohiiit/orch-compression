@@ -473,15 +473,19 @@ fn merge_starknet_state_updates(updates: Vec<StateUpdate>) -> color_eyre::Result
     for (contract_addr, storage_map) in storage_diffs_map {
         let storage_entries = storage_map
             .into_iter()
+            .filter(|(_, value)| *value != Felt::ZERO) // Filter out entries with value 0x0
             .map(|(key, value)| StorageEntry { key, value })
-            .collect();
+            .collect::<Vec<_>>();
             
-        let contract_storage_diff = ContractStorageDiffItem {
-            address: contract_addr,
-            storage_entries,
-        };
-        
-        state_diff.storage_diffs.push(contract_storage_diff);
+        // Only include contracts that have non-zero storage entries
+        if !storage_entries.is_empty() {
+            let contract_storage_diff = ContractStorageDiffItem {
+                address: contract_addr,
+                storage_entries,
+            };
+            
+            state_diff.storage_diffs.push(contract_storage_diff);
+        }
     }
     
     // Deployed contracts

@@ -2,7 +2,6 @@ use crate::constants::{BLS_MODULUS, BLOB_LEN, GENERATOR, ONE, TWO};
 use num_bigint::BigUint;
 use num_traits::{Num, Zero};
 use rayon::prelude::*;
-use std::io::{self, Write};
 use std::fs::File;
 use std::collections::HashSet;
 use eyre::eyre;
@@ -11,6 +10,9 @@ use std::fs;
 use std::str;
 use std::path::PathBuf;
 use crate::serde_utils;
+use crate::models;
+use std::fmt;
+use std::io::{self, BufRead, BufReader, Write};
 
 /// Convert field elements to BigUint representation
 ///
@@ -51,6 +53,36 @@ pub fn write_biguint_to_file(numbers: &Vec<BigUint>, file_path: &str) -> io::Res
         writeln!(file, "{}", number)?;
     }
     Ok(())
+}
+
+/// Read a vector of BigUint from a file
+///
+/// # Arguments
+/// * `file_path` - Path to the file containing BigUint values (one per line)
+///
+/// # Returns
+/// Result containing the vector of BigUint values or an error
+pub fn read_biguint_from_file(file_path: &str) -> io::Result<Vec<BigUint>> {
+    let file = File::open(file_path)?;
+    let reader = BufReader::new(file);
+    let mut result = Vec::new();
+    
+    for line in reader.lines() {
+        let line = line?;
+        let trimmed = line.trim();
+        if !trimmed.is_empty() {
+            match BigUint::parse_bytes(trimmed.as_bytes(), 10) {
+                Some(num) => result.push(num),
+                None => return Err(io::Error::new(
+                    io::ErrorKind::InvalidData,
+                    format!("Failed to parse BigUint from line: {}", trimmed)
+                )),
+            }
+        }
+    }
+    
+    println!("Read {} BigUint values from {}", result.len(), file_path);
+    Ok(result)
 }
 
 /// Perform Number Theoretic Transform (NTT) on a vector of BigUint values

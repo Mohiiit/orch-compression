@@ -1,3 +1,6 @@
+// This file contains the main entry point for the orch-compression utility.
+// It handles command-line arguments and dispatches to the appropriate functionality
+// based on the command provided by the user.
 mod blob_utils;
 mod compression;
 mod constants;
@@ -18,6 +21,13 @@ use starknet::{
     }, 
 };
 
+/// Main function for the orch-compression utility
+/// 
+/// This function:
+/// 1. Initializes error handling
+/// 2. Loads environment variables
+/// 3. Parses command line arguments
+/// 4. Dispatches to the appropriate command handler
 #[tokio::main]
 async fn main() -> Result<()> {
     // Initialize error handling
@@ -39,10 +49,15 @@ async fn main() -> Result<()> {
         eprintln!("  fetch-update <output_dir> [start_block] [end_block] - Fetch state updates from Starknet and save to output directory");
         eprintln!("  merge-json <input_dir> <output_file> - Merge state updates from input directory and write pure JSON to output file");
         eprintln!("  json-to-blob <input_file> <output_file> - Convert a JSON state update file directly to a blob");
+        eprintln!("  blob-to-dataJson <input_file> <output_file> - Convert a BigUint file to DataJson format");
+        eprintln!("  compare-json <file1> <file2> <output_file> - Compare two DataJson files and output differences");
         process::exit(1);
     }
     
+    // Dispatch to the appropriate command handler based on the first argument
     match args[1].as_str() {
+        // Command: compress
+        // Compresses state updates from an input directory and writes to an output file
         "compress" => {
             if args.len() < 4 {
                 eprintln!("Usage: orch-compression compress <input_dir> <output_file>");
@@ -52,7 +67,12 @@ async fn main() -> Result<()> {
             }
             
             let input_dir = &args[2];
-            let output_file = &args[3];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/compress";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
             
             println!("Processing state updates from directory: {}", input_dir);
             
@@ -90,6 +110,8 @@ async fn main() -> Result<()> {
             println!("Compression completed successfully");
         },
         
+        // Command: blob
+        // Creates a blob from an input file and writes to an output file
         "blob" => {
             if args.len() < 4 {
                 eprintln!("Usage: orch-compression blob <input_file> <output_file>");
@@ -97,7 +119,12 @@ async fn main() -> Result<()> {
             }
             
             let input_file = &args[2];
-            let output_file = &args[3];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/blob";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
             
             println!("Reading data from {}", input_file);
             let blob_data = serde_utils::parse_file_to_blob_data(input_file)?;
@@ -114,6 +141,8 @@ async fn main() -> Result<()> {
             println!("Blob creation completed successfully");
         },
         
+        // Command: recover
+        // Recovers original data from a blob file and saves to specified outputs
         "recover" => {
             if args.len() < 4 {
                 eprintln!("Usage: orch-compression recover <blob_file> <output_file>");
@@ -121,10 +150,14 @@ async fn main() -> Result<()> {
             }
             
             let blob_file = &args[2];
-            let output_file = &args[3];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/recover";
+            fs::create_dir_all(output_dir)?;
             
             // Extract file name from the blob file path
-            let file_name = Path::new(output_file)
+            let file_name = Path::new(output_file_name)
                 .file_name()
                 .and_then(|name| name.to_str())
                 .unwrap_or("unknown");
@@ -144,7 +177,7 @@ async fn main() -> Result<()> {
             let processed_data = blob_utils::process_from_blob(recovered_data, size);
             
             // Save processed data to post_process_blob_<file_name>.txt
-            let post_process_file = format!("post_process_blob_{}.txt", file_name);
+            let post_process_file = format!("{}/post_process_blob_{}.txt", output_dir, file_name);
             println!("Writing processed blob data to {}", post_process_file);
             blob_utils::write_biguint_to_file(&processed_data, &post_process_file)?;
             
@@ -153,7 +186,7 @@ async fn main() -> Result<()> {
             let state_diffs = serde_utils::parse_state_diffs(&processed_data);
             
             // Save parsed state diffs to squashed_state_diff_from_blob_<file_name>.json
-            let state_diff_file = format!("squashed_state_diff_from_blob_{}.json", file_name);
+            let state_diff_file = format!("{}/squashed_state_diff_from_blob_{}.json", output_dir, file_name);
             println!("Writing parsed state diffs to {}", state_diff_file);
             let json_str = serde_utils::to_json(state_diffs);
             fs::write(&state_diff_file, json_str)?;
@@ -161,6 +194,8 @@ async fn main() -> Result<()> {
             println!("Recovery completed successfully");
         },
         
+        // Command: multi-blob
+        // Processes multiple state updates and creates optimized blobs
         "multi-blob" => {
             if args.len() < 4 {
                 eprintln!("Usage: orch-compression multi-blob <input_dir> <output_dir>");
@@ -168,9 +203,9 @@ async fn main() -> Result<()> {
             }
             
             let input_dir = &args[2];
-            let output_dir = &args[3];
             
-            // Ensure output directory exists
+            // Create output directory
+            let output_dir = "output/multi-blob";
             fs::create_dir_all(output_dir)?;
             
             println!("Processing state updates from {}", input_dir);
@@ -217,15 +252,16 @@ async fn main() -> Result<()> {
             println!("Multi-blob processing completed successfully");
         },
         
+        // Command: fetch-update
+        // Fetches state updates from Starknet and saves to an output directory
         "fetch-update" => {
             if args.len() < 3 {
                 eprintln!("Usage: orch-compression fetch-update <output_dir> [start_block] [end_block]");
                 process::exit(1);
             }
             
-            let output_dir = &args[2];
-            
-            // Ensure output directory exists
+            // Create output directory
+            let output_dir = "output/fetch-update";
             fs::create_dir_all(output_dir)?;
             
             // Get RPC URL from .env file or use default
@@ -338,6 +374,8 @@ async fn main() -> Result<()> {
             }
         },
         
+        // Command: merge-json
+        // Merges state updates from an input directory and writes to a JSON output file
         "merge-json" => {
             if args.len() < 4 {
                 eprintln!("Usage: orch-compression merge-json <input_dir> <output_file>");
@@ -347,7 +385,12 @@ async fn main() -> Result<()> {
             }
             
             let input_dir = &args[2];
-            let output_file = &args[3];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/merge-json";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
             
             println!("Processing state updates from directory: {}", input_dir);
             
@@ -382,6 +425,8 @@ async fn main() -> Result<()> {
             println!("JSON merge completed successfully");
         },
         
+        // Command: json-to-blob
+        // Converts a JSON state update file directly to a blob
         "json-to-blob" => {
             if args.len() < 4 {
                 eprintln!("Usage: orch-compression json-to-blob <input_file> <output_file> [block_number]");
@@ -389,7 +434,12 @@ async fn main() -> Result<()> {
             }
             
             let input_file = &args[2];
-            let output_file = &args[3];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/json-to-blob";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
             
             // Get optional block number
             let block_number = if args.len() >= 5 {
@@ -405,11 +455,78 @@ async fn main() -> Result<()> {
             let blob_data = serde_utils::json_to_blob_data(&json_str, block_number).await?;
             
             println!("Writing blob to {}", output_file);
-            blob_utils::write_biguint_to_file(&blob_data, output_file)?;
+            blob_utils::write_biguint_to_file(&blob_data, &output_file)?;
             
             println!("JSON to blob conversion completed successfully");
         },
         
+        // Command: blob-to-dataJson
+        // Converts a BigUint file to DataJson format
+        "blob-to-dataJson" => {
+            if args.len() < 4 {
+                eprintln!("Usage: orch-compression blob-to-dataJson <input_file> <output_file>");
+                eprintln!("  input_file - BigUint file to convert");
+                eprintln!("  output_file - File to write DataJson to");
+                process::exit(1);
+            }
+            
+            let input_file = &args[2];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/blob-to-dataJson";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
+            
+            println!("Reading BigUint data from {}", input_file);
+            let blob_data = blob_utils::read_biguint_from_file(input_file)?;
+            
+            println!("Parsing state diffs from BigUint data");
+            let data_json = serde_utils::parse_state_diffs(&blob_data);
+            
+            println!("Converting to JSON");
+            let json_str = serde_utils::to_json(data_json);
+            
+            println!("Writing DataJson to {}", output_file);
+            fs::write(output_file, json_str)?;
+            
+            println!("BigUint to DataJson conversion completed successfully");
+        },
+        
+        // Command: compare-json
+        // Compares two DataJson files and outputs the differences
+        "compare-json" => {
+            if args.len() < 5 {
+                return Err(color_eyre::eyre::eyre!("Usage: orch-compression compare-json <file1> <file2> <output_file>"));
+            }
+
+            let file1 = &args[2];
+            let file2 = &args[3];
+            let output_file = &args[4];
+
+            // Create output directory if it doesn't exist
+            let output_dir = "output/compare-json";
+            fs::create_dir_all(output_dir)?;
+            let output_path = format!("{}/{}", output_dir, output_file);
+
+            println!("Reading first JSON file: {}", file1);
+            let json1 = fs::read_to_string(file1)?;
+            let data_json1 = serde_utils::parse_json_to_data_json(&json1)?;
+
+            println!("Reading second JSON file: {}", file2);
+            let json2 = fs::read_to_string(file2)?;
+            let data_json2 = serde_utils::parse_json_to_data_json(&json2)?;
+
+            println!("Comparing JSON files...");
+            let comparison = serde_utils::compare_data_json(data_json1, data_json2);
+
+            println!("Writing comparison report to: {}", output_path);
+            fs::write(&output_path, comparison)?;
+            
+            println!("Comparison complete. Report written to {}", output_path);
+        },
+        
+        // Unknown command handler
         _ => {
             eprintln!("Unknown command: {}", args[1]);
             eprintln!("Usage: orch-compression <command> [arguments]");
@@ -421,6 +538,8 @@ async fn main() -> Result<()> {
             eprintln!("  fetch-update <output_dir> [start_block] [end_block] - Fetch state updates from Starknet and save to output directory");
             eprintln!("  merge-json <input_dir> <output_file> - Merge state updates from input directory and write pure JSON to output file");
             eprintln!("  json-to-blob <input_file> <output_file> - Convert a JSON state update file directly to a blob");
+            eprintln!("  blob-to-dataJson <input_file> <output_file> - Convert a BigUint file to DataJson format");
+            eprintln!("  compare-json <file1> <file2> <output_file> - Compare two DataJson files and output differences");
             process::exit(1);
         }
     }
