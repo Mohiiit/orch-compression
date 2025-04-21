@@ -548,46 +548,56 @@ pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate)
     ));
     
     // Create a vector to hold the blob data
-    let mut blob_data: Vec<Felt> = vec![Felt::from(state_diff.storage_diffs.len())];
+    // Initialize with placeholder for total contract count (will update later)
+    let mut blob_data: Vec<Felt> = vec![Felt::ZERO];
 
     // Create maps for easier lookup
-    let deployed_contracts: HashMap<Felt, Felt> =
+    let mut deployed_contracts: HashMap<Felt, Felt> =
         state_diff.deployed_contracts.into_iter().map(|item| (item.address, item.class_hash)).collect();
-    let replaced_classes: HashMap<Felt, Felt> =
+    let mut replaced_classes: HashMap<Felt, Felt> =
         state_diff.replaced_classes.into_iter().map(|item| (item.contract_address, item.class_hash)).collect();
     let mut nonces: HashMap<Felt, Felt> =
         state_diff.nonces.into_iter().map(|item| (item.contract_address, item.nonce)).collect();
+
+    // Keep track of processed addresses
+    let mut processed_addresses = HashSet::new();
 
     // Sort storage diffs by address for deterministic output
     state_diff.storage_diffs.sort_by_key(|diff| diff.address);
 
     // Process each storage diff
-    for ContractStorageDiffItem { address, mut storage_entries } in state_diff.storage_diffs.into_iter() {
-        // Check if there's a class flag (deployed or replaced)
-        let class_flag = deployed_contracts.get(&address).or_else(|| replaced_classes.get(&address));
-
-        // Get nonce if it exists
-        let mut nonce = nonces.remove(&address);
-
-        if nonce.is_none() && !storage_entries.is_empty() && address != Felt::ONE {
-            let get_current_nonce_result = provider
-                .get_nonce(BlockId::Number(block_no), address)
-                .await
-                .wrap_err("Failed to get nonce ".to_string())?;
-
-            nonce = Some(get_current_nonce_result);
+    for ContractStorageDiffItem { address, mut storage_entries } in state_diff.storage_diffs.clone().into_iter() {
+        // Mark this address as processed
+        processed_addresses.insert(address);
+        
+        // Get class hash from deployed_contracts or replaced_classes
+        let mut class_hash = None;
+        
+        // First try deployed contracts
+        if let Some(hash) = deployed_contracts.remove(&address) {
+            println!("Found deployed contract at address {}: class_hash={}", address, hash);
+            class_hash = Some(hash);
+        } 
+        // Then try replaced classes
+        else if let Some(hash) = replaced_classes.remove(&address) {
+            println!("Found replaced class at address {}: class_hash={}", address, hash);
+            class_hash = Some(hash);
         }
 
-        // Create the DA word
-        let da_word = da_word(class_flag.is_some(), nonce, storage_entries.len() as u64)?;
+        // Get nonce if it exists and remove from map since we're processing this address
+        let nonce = nonces.remove(&address);
+
+        // Create the DA word - class_flag is true if class_hash is Some
+        let da_word = da_word(class_hash.is_some(), nonce, storage_entries.len() as u64)?;
         
         // Add address and DA word to blob data
         blob_data.push(address);
         blob_data.push(da_word);
 
         // If there's a class hash, add it to blob data
-        if let Some(class_hash) = class_flag {
-            blob_data.push(*class_hash);
+        if let Some(hash) = class_hash {
+            blob_data.push(hash);
+            println!("Adding class hash {} for address {}", hash, address);
         }
 
         // Sort storage entries by key for deterministic output
@@ -599,6 +609,64 @@ pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate)
             blob_data.push(entry.value);
         }
     }
+    
+    // Process leftover nonces (contracts that have nonce updates but no storage updates)
+    let mut leftover_addresses = Vec::new();
+    
+    // Check for any addresses with deployed contracts that weren't processed
+    for (address, class_hash) in deployed_contracts.iter() {
+        if !processed_addresses.contains(address) {
+            leftover_addresses.push((*address, Some(*class_hash), nonces.remove(address)));
+            println!("Found leftover deployed contract: address={}, class_hash={}", address, class_hash);
+        }
+    }
+    
+    // Check for any addresses with replaced classes that weren't processed
+    for (address, class_hash) in replaced_classes.iter() {
+        if !processed_addresses.contains(address) {
+            leftover_addresses.push((*address, Some(*class_hash), nonces.remove(address)));
+            println!("Found leftover replaced class: address={}, class_hash={}", address, class_hash);
+        }
+    }
+    
+    // Check for any addresses with only nonce updates that weren't processed
+    for (address, nonce) in nonces.iter() {
+        if !processed_addresses.contains(address) {
+            leftover_addresses.push((*address, None, Some(*nonce)));
+            println!("Found leftover nonce: address={}, nonce={}", address, nonce);
+        }
+    }
+    
+    // Sort leftover addresses for deterministic output
+    leftover_addresses.sort_by_key(|(address, _, _)| *address);
+    
+    println!("Processing {} leftover addresses with nonce or class updates but no storage updates", leftover_addresses.len());
+    
+    // Process each leftover address
+    for (address, class_hash, nonce) in leftover_addresses.clone() {
+        // Create DA word with zero storage entries
+        let da_word = da_word(class_hash.is_some(), nonce, 0)?;
+        
+        println!("Processing leftover address {}: class_hash={:?}, nonce={:?}", 
+                 address, 
+                 class_hash.map(|h| h.to_string()), 
+                 nonce.map(|n| n.to_string()));
+        
+        // Add address and DA word to blob data
+        blob_data.push(address);
+        blob_data.push(da_word);
+        
+        // If there's a class hash, add it to blob data
+        if let Some(hash) = class_hash {
+            blob_data.push(hash);
+            println!("Adding class hash {} for leftover address {}", hash, address);
+        }
+    }
+    
+    // Update first element with total number of contracts (original storage diffs + leftover addresses)
+    let total_contracts = state_diff.storage_diffs.len() + leftover_addresses.len();
+    blob_data[0] = Felt::from(total_contracts);
+    println!("Total contract updates in blob: {}", total_contracts);
     
     // Add declared classes count
     blob_data.push(Felt::from(state_diff.declared_classes.len()));
@@ -612,7 +680,7 @@ pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate)
         blob_data.push(compiled_class_hash);
     }
 
-    // println!("blob_data: {:?}", blob_data);
+    println!("Created blob data with {} elements", blob_data.len());
 
     Ok(blob_data)
 }
