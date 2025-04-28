@@ -261,9 +261,12 @@ async fn main() -> Result<()> {
                 process::exit(1);
             }
             
-            // Create output directory
-            let output_dir = "output/fetch-update";
-            fs::create_dir_all(output_dir)?;
+            let user_dir = &args[2];
+            
+            // Create base output directory and user-specified subdirectory
+            let base_output_dir = "output/fetch-update";
+            let full_output_dir = format!("{}/{}", base_output_dir, user_dir);
+            fs::create_dir_all(&full_output_dir)?;
             
             // Get RPC URL from .env file or use default
             let rpc_url = env::var("STARKNET_RPC_URL")
@@ -328,8 +331,9 @@ async fn main() -> Result<()> {
                             let json_str = serde_json::to_string_pretty(&state_update)
                                 .map_err(|e| color_eyre::eyre::eyre!("Failed to serialize state update: {}", e))?;
                             
-                            // Create filename
-                            let output_path = Path::new(output_dir).join(format!("state_update_{}.json", block_num));
+                            // Create filename using full_output_dir instead of output_dir
+                            let output_path = Path::new(&full_output_dir)
+                                .join(format!("state_update_{}.json", block_num));
                             
                             // Write to file
                             println!("Writing state update to {:?}", output_path);
@@ -359,8 +363,9 @@ async fn main() -> Result<()> {
                         let json_str = serde_json::to_string_pretty(&state_update)
                             .map_err(|e| color_eyre::eyre::eyre!("Failed to serialize state update: {}", e))?;
                         
-                        // Create filename
-                        let output_path = Path::new(output_dir).join("state_update_latest.json");
+                        // Create filename using full_output_dir instead of output_dir
+                        let output_path = Path::new(&full_output_dir)
+                            .join("state_update_latest.json");
                         
                         // Write to file
                         println!("Writing state update to {:?}", output_path);
