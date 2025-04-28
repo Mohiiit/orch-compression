@@ -188,6 +188,23 @@ This command provides a direct path from JSON state updates to blob data without
 
 This command is useful for converting raw BigUint data directly to a structured DataJson format without going through the full recovery process.
 
+### 9. Stateless-Decompression Command
+
+**Usage**: `orch-compression stateless-decompression <input_file> <output_file>`
+
+**Data Flow**:
+1. **Input**: A file containing BigUint values representing compressed data
+   - The input file should contain BigUint values that were previously compressed using stateless compression
+2. **Processing**:
+   - Reads the BigUint values from the input file
+   - Converts the BigUint values to Felt array for processing
+   - Performs stateless decompression on the Felt array
+   - Converts the decompressed Felt array back to BigUint values
+3. **Output**: A file at `output/stateless-decompression/<output_file>` containing the decompressed data as BigUint values
+   - The output maintains the same BigUint format but contains the decompressed data
+
+This command is useful for recovering the original data from files that were compressed using the stateless compression algorithm. It handles the necessary conversions between BigUint and Felt types while maintaining data integrity throughout the decompression process.
+
 ## Key Data Structures
 
 Throughout these flows, several key data structures are manipulated:

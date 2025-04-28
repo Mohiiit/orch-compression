@@ -106,35 +106,127 @@ pub fn compress_state_updates(update: DataJson) -> DataJson {
 /// * `class_flag` - Indicates if a new class hash is present
 /// * `nonce_change` - Optional nonce value as a Felt
 /// * `num_changes` - Number of storage updates
+/// * `version` - Version string to determine the encoding format
 /// 
 /// # Returns
 /// A `Felt` representing the encoded DA word
-pub fn da_word(class_flag: bool, nonce_change: Option<Felt>, num_changes: u64) -> color_eyre::Result<Felt> {
-    // padding of 127 bits
-    let mut binary_string = "0".repeat(127);
+pub fn da_word(
+    class_flag: bool,
+    nonce_change: Option<Felt>,
+    num_changes: u64,
+    version: &str,
+    shall_print: bool
+) -> color_eyre::Result<Felt> {
+    // Parse version to determine format
+    let is_new_version = {
+        let version_parts: Vec<u32> = version
+            .split('.')
+            .filter_map(|s| s.parse().ok())
+            .collect();
+        
+        if version_parts.len() >= 3 {
+            version_parts[0] > 0 
+            || (version_parts[0] == 0 && version_parts[1] > 13)
+            || (version_parts[0] == 0 && version_parts[1] == 13 && version_parts[2] >= 3)
+        } else {
+            false
+        }
+    };
+    let mut binary_string = String::new();
+    if is_new_version {
+        // v0.13.3+ format:
+        // - new_nonce (64 bits)
+        // - n_updates (8 or 64 bits depending on size)
+        // - n_updates_len (1 bit)
+        // - class_flag (1 bit)
+        if shall_print {
+            println!("New version format");
+        }
 
-    // class flag of one bit
-    if class_flag {
-        binary_string += "1"
+        // Add new_nonce (64 bits)
+        if let Some(new_nonce) = nonce_change {
+            let bytes: [u8; 32] = new_nonce.to_bytes_be();
+            let biguint = BigUint::from_bytes_be(&bytes);
+            let nonce_binary = format!("{:b}", biguint);
+            binary_string += &format!("{:0>64}", nonce_binary);
+        } else {
+            // If nonce unchanged, use 64 zeros
+            binary_string += &"0".repeat(64);
+        }
+
+        if shall_print {
+            println!("Nonce binary is: {:?}", binary_string);
+        }
+
+        // Determine if we need 8 or 64 bits for num_changes
+        let needs_large_updates = num_changes >= 256;
+        if shall_print {
+            println!("Needs large updates: {:?} and number of changes are: {:?}", needs_large_updates, num_changes);
+        }
+
+        if needs_large_updates {
+            // Use 64 bits for updates
+            let updates_binary = format!("{:b}", num_changes);
+            binary_string += &format!("{:0>64}", updates_binary);
+            // Add remaining padding to reach 254 bits
+            binary_string = format!("{:0>254}", binary_string);
+            // Add n_updates_len (1) and class_flag
+            binary_string.push('0'); // n_updates_len = 1 for large updates
+            if shall_print {
+                println!("Binary string is: {:?}", binary_string);
+            }
+        } else {
+            // Use 8 bits for updates
+            let updates_binary = format!("{:b}", num_changes);
+            binary_string += &format!("{:0>8}", updates_binary);
+            // Add remaining padding to reach 254 bits
+            binary_string = format!("{:0>254}", binary_string);
+            // Add n_updates_len (0) and class_flag
+            binary_string.push('1'); // n_updates_len = 0 for small updates
+            if shall_print {
+                println!("Binary string is (8 bits update): {:?}", binary_string);
+            }
+        }
+
+        // Add class_flag as LSB
+        binary_string.push(if class_flag { '1' } else { '0' });
+
+        if shall_print {
+            println!("whole binary is: {:?}", binary_string);
+        }
+
     } else {
-        binary_string += "0"
-    }
+        // Old format (pre-0.13.3)
+        // padding of 127 bits
+        binary_string = "0".repeat(127);
 
-    // checking for nonce here
-    if let Some(new_nonce) = nonce_change {
-        let bytes: [u8; 32] = new_nonce.to_bytes_be();
-        let biguint = BigUint::from_bytes_be(&bytes);
-        let binary_string_local = format!("{:b}", biguint);
-        let padded_binary_string = format!("{:0>64}", binary_string_local);
+        // class flag of one bit
+        if class_flag {
+            binary_string += "1"
+        } else {
+            binary_string += "0"
+        }
+
+        // checking for nonce here
+        if let Some(new_nonce) = nonce_change {
+            let bytes: [u8; 32] = new_nonce.to_bytes_be();
+            let biguint = BigUint::from_bytes_be(&bytes);
+            let binary_string_local = format!("{:b}", biguint);
+            let padded_binary_string = format!("{:0>64}", binary_string_local);
+            binary_string += &padded_binary_string;
+        } else {
+            let binary_string_local = "0".repeat(64);
+            binary_string += &binary_string_local;
+        }
+
+        let binary_representation = format!("{:b}", num_changes);
+        let padded_binary_string = format!("{:0>64}", binary_representation);
         binary_string += &padded_binary_string;
-    } else {
-        let binary_string_local = "0".repeat(64);
-        binary_string += &binary_string_local;
     }
 
-    let binary_representation = format!("{:b}", num_changes);
-    let padded_binary_string = format!("{:0>64}", binary_representation);
-    binary_string += &padded_binary_string;
+    if shall_print {
+        println!("Binary string is: {:?}", binary_string);
+    }
 
     let biguint = BigUint::from_str_radix(binary_string.as_str(), 2)
         .map_err(|e| color_eyre::eyre::eyre!("Failed to convert binary string to BigUint: {}", e))?;
@@ -280,7 +372,7 @@ pub fn merge_state_update_files(file_paths: Vec<(PathBuf, u64)>) -> color_eyre::
         
         // Read and parse file
         let blob_data = serde_utils::parse_file_to_blob_data(file_path.to_str().unwrap())?;
-        let data_json = serde_utils::parse_state_diffs(&blob_data);
+        let data_json = serde_utils::parse_state_diffs(&blob_data, "0.13.3");
         
         // Process class declarations (collect all of them)
         for class_decl in data_json.class_declaration {
@@ -365,7 +457,7 @@ fn merge_contract_updates(existing_update: &mut ContractUpdate, new_update: Cont
 /// 
 /// # Returns
 /// A JSON string with all state updates merged
-pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>) -> color_eyre::Result<String> {
+pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>, version: &str) -> color_eyre::Result<String> {
     // Maps to track latest state by contract address
     let mut state_updates = Vec::new();
     
@@ -382,7 +474,7 @@ pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>) -> colo
     }
     
     // Merge state updates
-    let merged_update = merge_starknet_state_updates(state_updates)?;
+    let merged_update = merge_starknet_state_updates(state_updates, version)?;
     
     // Serialize to JSON string
     let json_string = serde_json::to_string_pretty(&merged_update)
@@ -398,7 +490,7 @@ pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>) -> colo
 /// 
 /// # Returns
 /// A single merged StateUpdate
-fn merge_starknet_state_updates(updates: Vec<StateUpdate>) -> color_eyre::Result<StateUpdate> {
+fn merge_starknet_state_updates(updates: Vec<StateUpdate>, version: &str) -> color_eyre::Result<StateUpdate> {
     if updates.is_empty() {
         return Err(color_eyre::eyre::eyre!("No state updates to merge"));
     }
@@ -531,10 +623,11 @@ fn merge_starknet_state_updates(updates: Vec<StateUpdate>) -> color_eyre::Result
 /// # Arguments
 /// * `block_no` - The block number of the state update
 /// * `state_update` - The StateUpdate to convert
+/// * `version` - Version of the starknet to be used
 /// 
 /// # Returns
 /// A vector of Felt values representing the state update in a format suitable for blob creation
-pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate) -> color_eyre::Result<Vec<Felt>> {
+pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate, version: &str) -> color_eyre::Result<Vec<Felt>> {
     let mut state_diff = state_update.state_diff;
 
     let rpc_url = env::var("STARKNET_RPC_URL")
@@ -587,8 +680,10 @@ pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate)
         // Get nonce if it exists and remove from map since we're processing this address
         let nonce = nonces.remove(&address);
 
+        let shall_print = (address==Felt::ONE);
+
         // Create the DA word - class_flag is true if class_hash is Some
-        let da_word = da_word(class_hash.is_some(), nonce, storage_entries.len() as u64)?;
+        let da_word = da_word(class_hash.is_some(), nonce, storage_entries.len() as u64, version, shall_print)?;
         
         // Add address and DA word to blob data
         blob_data.push(address);
@@ -645,7 +740,7 @@ pub async fn state_update_to_blob_data(block_no: u64, state_update: StateUpdate)
     // Process each leftover address
     for (address, class_hash, nonce) in leftover_addresses.clone() {
         // Create DA word with zero storage entries
-        let da_word = da_word(class_hash.is_some(), nonce, 0)?;
+        let da_word = da_word(class_hash.is_some(), nonce, 0, version, false)?;
         
         println!("Processing leftover address {}: class_hash={:?}, nonce={:?}", 
                  address, 
@@ -700,5 +795,6 @@ pub async fn json_to_blob_data(json_file_path: &str, block_no: u64) -> color_eyr
         .map_err(|e| color_eyre::eyre::eyre!("Failed to parse state update file: {}", e))?;
     
     // Convert the state update to blob data
-    state_update_to_blob_data(block_no, state_update).await
-} 
+    state_update_to_blob_data(block_no, state_update, "0.13.3").await
+}
+

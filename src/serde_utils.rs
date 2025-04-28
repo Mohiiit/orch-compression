@@ -13,12 +13,68 @@ use starknet::core::types::{StateUpdate, Felt};
 
 const BLOB_LEN: usize = 4096;
 
-/// Function to parse the encoded data into a DataJson struct.
+/// Function to extract bits based on version >= 0.13.3 format
 /// # Arguments
-/// * `data` - A slice of `BigUint` representing the encoded data.
+/// * `info_word` - The `BigUint` to extract bits from.
 /// # Returns
-/// A `DataJson` struct containing the parsed data.
-pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
+/// A tuple containing:
+/// - new_nonce: u64 (0 if nonce unchanged)
+/// - number_of_storage_updates: u64 (8 or 64 bits based on n_updates_len)
+/// - class_flag: bool (indicates if class was replaced)
+fn extract_bits_v2(info_word: &BigUint) -> (u64, u64, bool) {
+    // converting the bigUint to binary
+    let binary_string = format!("{:b}", info_word);
+    // adding padding so that it can be of 256 length
+    let bitstring = format!("{:0>256}", binary_string);
+    if bitstring.len() != 256 {
+        panic!("Input string must be 256 bits long");
+    }
+
+    // Reading from right to left (LSB is last bit):
+    // - class_flag (1 bit)
+    // - n_updates_len (1 bit)
+    // - n_updates (8 or 64 bits depending on n_updates_len)
+    // - new_nonce (64 bits)
+
+    // Get class_flag (LSB)
+    let class_flag = bitstring.chars().nth(255).unwrap() == '1';
+
+    // Get n_updates_len (second bit from right)
+    let n_updates_len = bitstring.chars().nth(254).unwrap() == '0';
+
+    // Get number_of_storage_updates based on n_updates_len
+    let number_of_storage_updates = if n_updates_len {
+        // Use 64 bits for large number of updates
+        // Reading 64 bits before the flags (bits 190-253)
+        let updates_bits = &bitstring[190..254];
+        u64::from_str_radix(updates_bits, 2)
+            .expect("Invalid binary string for large storage updates count")
+    } else {
+        // Use 8 bits for small number of updates
+        // Reading 8 bits before the flags (bits 246-253)
+        let updates_bits = &bitstring[246..254];
+        u64::from_str_radix(updates_bits, 2)
+            .expect("Invalid binary string for small storage updates count")
+    };
+
+    // Get the new_nonce (64 bits)
+    // Position depends on n_updates_len
+    let new_nonce_bits = if n_updates_len {
+        // If using 64 bits for updates, nonce is at bits 126-189
+        &bitstring[126..190]
+    } else {
+        // If using 8 bits for updates, nonce is at bits 182-245
+        &bitstring[182..246]
+    };
+    let new_nonce = u64::from_str_radix(new_nonce_bits, 2)
+        .expect("Invalid binary string for new nonce");
+
+    // Note: new_nonce will be 0 if the nonce is unchanged
+    (new_nonce, number_of_storage_updates, class_flag)
+}
+
+/// Updated parse_state_diffs function with version support
+pub fn parse_state_diffs(data: &[BigUint], version: &str) -> DataJson {
     if data.is_empty() {
         println!("Error: Empty data array");
         return DataJson {
@@ -28,6 +84,23 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
             class_declaration: Vec::new(),
         };
     }
+
+    // Parse version string to determine which format to use
+    let is_new_version = {
+        let version_parts: Vec<u32> = version
+            .split('.')
+            .filter_map(|s| s.parse().ok())
+            .collect();
+        
+        if version_parts.len() >= 3 {
+            // Compare with 0.13.3
+            version_parts[0] > 0 
+            || (version_parts[0] == 0 && version_parts[1] > 13)
+            || (version_parts[0] == 0 && version_parts[1] == 13 && version_parts[2] >= 3)
+        } else {
+            false // Default to old version if version string is invalid
+        }
+    };
 
     let mut updates = Vec::new();
     let mut i = 0;
@@ -53,8 +126,7 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
         println!("Warning: Expected special address 0x1 at index 1, found {}", special_address);
     }
     
-    // iterate only on len-1 because (len-1)th element contains the length
-    // of declared classes
+    // Process contract updates
     for _ in 0..contract_updated_num {
         if i >= data.len() {
             println!("Warning: Reached end of data while reading contract updates");
@@ -62,20 +134,24 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
         }
         
         let address = data[i].clone();
-        // Break if address undefined
         if address == BigUint::zero() {
             break;
         }
         i += 1;
         
-        // Break after blob data len or end of data
         if i >= data.len() || i >= BLOB_LEN - 1 {
             println!("Warning: Reached end of data or blob length limit");
             break;
         }
         
         let info_word = &data[i];
-        let (class_flag, nonce, number_of_storage_updates) = extract_bits(&info_word);
+        let (nonce, number_of_storage_updates, class_flag) = if is_new_version {
+            let (new_nonce, storage_updates, class_flag) = extract_bits_v2(info_word);
+            (new_nonce, storage_updates, class_flag)
+        } else {
+            let (class_flag, nonce, storage_updates) = extract_bits(info_word);
+            (nonce, storage_updates, class_flag)
+        };
         i += 1;
 
         let new_class_hash = if class_flag {
@@ -93,7 +169,6 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
         
         let mut storage_updates = Vec::new();
         for _ in 0..number_of_storage_updates {
-            // Break if we reached the end of data or blob length limit
             if i + 1 >= data.len() || i >= BLOB_LEN - 1 {
                 println!("Warning: Reached end of data or blob length limit while reading storage updates");
                 break;
@@ -104,7 +179,6 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
             let value = data[i].clone();
             i += 1;
             
-            // Skip null entries
             if key == BigUint::zero() && value == BigUint::zero() {
                 break;
             }
@@ -121,7 +195,7 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
         });
     }
 
-    // Check if we have enough data to read the declared classes length
+    // Process class declarations (remains the same for both versions)
     let declared_classes_len: usize = if i < data.len() {
         data[i].to_usize().unwrap_or(0)
     } else {
@@ -138,14 +212,12 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
         }
         
         let class_hash = data[i].clone();
-        // Break if address undefined
         if class_hash == BigUint::zero() {
             println!("Warning: Found zero class hash when expecting non-zero");
             break;
         }
         i += 1;
         
-        // Break if we reached the end of data or blob length limit
         if i >= data.len() || i >= BLOB_LEN - 1 {
             println!("Warning: Reached end of data or blob length limit while reading compiled class hash");
             break;
@@ -160,14 +232,12 @@ pub fn parse_state_diffs(data: &[BigUint]) -> DataJson {
         });
     }
 
-    let final_result = DataJson {
+    DataJson {
         state_update_size: (contract_updated_num).to_u64().unwrap_or(0),
         state_update: updates,
         class_declaration_size: declared_classes_len.to_u64().unwrap_or(0),
         class_declaration: class_declaration_updates,
-    };
-
-    final_result
+    }
 }
 
 /// Function to convert a struct to a JSON string.
@@ -328,16 +398,17 @@ pub fn extract_block_number_from_filename(filename: &str) -> u64 {
 /// # Arguments
 /// * `json_str` - JSON string containing a StateUpdate
 /// * `block_no` - Block number for the state update
+/// * `version` - Version of the state update file
 ///
 /// # Returns
 /// A Vec<BigUint> suitable for blob creation
-pub async fn json_to_blob_data(json_str: &str, block_no: u64) -> Result<Vec<BigUint>> {
+pub async fn json_to_blob_data(json_str: &str, block_no: u64, version: &str) -> Result<Vec<BigUint>> {
     // Parse the JSON into a StateUpdate
     let state_update: StateUpdate = serde_json::from_str(json_str)
         .map_err(|e| color_eyre::eyre::eyre!("Failed to parse JSON as StateUpdate: {}", e))?;
     
     // Convert StateUpdate to Felt vector
-    let felts = compression::state_update_to_blob_data(block_no, state_update).await?;
+    let felts = compression::state_update_to_blob_data(block_no, state_update, version).await?;
 
     println!("felts size is: {:?}", felts.len());
     
@@ -361,7 +432,7 @@ pub async fn json_to_stateless_compressed_blob_data(json_str: &str, block_no: u6
         .map_err(|e| color_eyre::eyre::eyre!("Failed to parse JSON as StateUpdate: {}", e))?;
 
     // Convert StateUpdate to Felt vector using the existing compression logic
-    let initial_felts = compression::state_update_to_blob_data(block_no, state_update).await?;
+    let initial_felts = compression::state_update_to_blob_data(block_no, state_update, "0.13.3").await?;
     println!("Initial felts size: {:?}", initial_felts.len());
 
     // Apply stateless compression
@@ -861,3 +932,39 @@ fn compare_contract_updates(update1: &ContractUpdate, update2: &ContractUpdate) 
         String::new()
     }
 }
+
+
+/// Converts a vector of BigUint values to a vector of Felt values
+/// 
+/// # Arguments
+/// * `biguints` - Vector of BigUint values to convert
+/// 
+/// # Returns
+/// A Result containing a vector of Felt values or an error
+pub fn convert_biguints_to_felts(biguints: &[BigUint]) -> Result<Vec<Felt>> {
+    biguints.iter()
+        .map(|b| {
+            let bytes = b.to_bytes_be();
+            // Handle empty bytes case
+            if bytes.is_empty() {
+                return Ok(Felt::ZERO);
+            }
+            
+            // Create a fixed size array for the bytes
+            let mut field_bytes = [0u8; 32];
+            
+            // Copy bytes, padding with zeros if needed
+            if bytes.len() <= 32 {
+                let start_idx = 32 - bytes.len();
+                field_bytes[start_idx..].copy_from_slice(&bytes);
+            } else {
+                // Truncate if bigger than 32 bytes
+                field_bytes.copy_from_slice(&bytes[bytes.len() - 32..]);
+            }
+            
+            // Convert to Felt
+            Ok(Felt::from_bytes_be(&field_bytes))
+    
+        })
+        .collect()
+} 

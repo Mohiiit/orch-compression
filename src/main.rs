@@ -15,7 +15,7 @@ use std::fs;
 use std::path::Path;
 use std::process;
 use starknet::{
-    core::types::{BlockId, BlockTag},
+    core::types::{BlockId, BlockTag, Felt},
     providers::{
         jsonrpc::{HttpTransport, JsonRpcClient},
         Provider, Url,
@@ -52,6 +52,7 @@ async fn main() -> Result<()> {
         eprintln!("  json-to-blob <input_file> <output_file> - Convert a JSON state update file directly to a blob");
         eprintln!("  blob-to-dataJson <input_file> <output_file> - Convert a BigUint file to DataJson format");
         eprintln!("  compare-json <file1> <file2> <output_file> - Compare two DataJson files and output differences");
+        eprintln!("  stateless-decompression <input_file> <output_file> - Decompress a BigUint file using stateless decompression");
         process::exit(1);
     }
     
@@ -182,16 +183,6 @@ async fn main() -> Result<()> {
             println!("Writing processed blob data to {}", post_process_file);
             blob_utils::write_biguint_to_file(&processed_data, &post_process_file)?;
             
-            // Parse state diffs from processed data
-            println!("Parsing state diffs from processed data");
-            let state_diffs = serde_utils::parse_state_diffs(&processed_data);
-            
-            // Save parsed state diffs to squashed_state_diff_from_blob_<file_name>.json
-            let state_diff_file = format!("{}/squashed_state_diff_from_blob_{}.json", output_dir, file_name);
-            println!("Writing parsed state diffs to {}", state_diff_file);
-            let json_str = serde_utils::to_json(state_diffs);
-            fs::write(&state_diff_file, json_str)?;
-            
             println!("Recovery completed successfully");
         },
         
@@ -226,7 +217,7 @@ async fn main() -> Result<()> {
                     let blob_data = serde_utils::parse_file_to_blob_data(path.to_str().unwrap())?;
                     
                     // Parse state diffs
-                    let data_json = serde_utils::parse_state_diffs(&blob_data);
+                    let data_json = serde_utils::parse_state_diffs(&blob_data, "0.13.3");
                     
                     // Compress state updates
                     let _compressed_data = compression::compress_state_updates(data_json);
@@ -387,12 +378,13 @@ async fn main() -> Result<()> {
                 eprintln!("Usage: orch-compression merge-json <input_dir> <output_file>");
                 eprintln!("  input_dir - Directory containing state update JSON files named <n>_<block_number>.json");
                 eprintln!("  output_file - File to write merged JSON to");
+                eprintln!("  version - Version of the state update file (optional, default: 0.13.3)");
                 process::exit(1);
             }
             
             let input_dir = &args[2];
             let output_file_name = &args[3];
-            
+            let version = &args[4];
             // Create output directory
             let output_dir = "output/merge-json";
             fs::create_dir_all(output_dir)?;
@@ -417,7 +409,7 @@ async fn main() -> Result<()> {
             println!("Found {} state update files, processing in block order", state_update_files.len());
             
             // Merge state updates from all files to JSON
-            let json_str = match compression::merge_state_update_files_to_json(state_update_files) {
+            let json_str = match compression::merge_state_update_files_to_json(state_update_files, version) {
                 Ok(json) => json,
                 Err(e) => {
                     eprintln!("Error merging state updates: {}", e);
@@ -435,12 +427,13 @@ async fn main() -> Result<()> {
         // Converts a JSON state update file directly to a blob
         "json-to-blob" => {
             if args.len() < 4 {
-                eprintln!("Usage: orch-compression json-to-blob <input_file> <output_file> [block_number]");
+                eprintln!("Usage: orch-compression json-to-blob <input_file> <output_file> [block_number] [version]");
                 process::exit(1);
             }
             
             let input_file = &args[2];
             let output_file_name = &args[3];
+            let version = &args[4];
             
             // Create output directory
             let output_dir = "output/json-to-blob";
@@ -458,7 +451,7 @@ async fn main() -> Result<()> {
             let json_str = fs::read_to_string(input_file)?;
             
             println!("Converting JSON to blob");
-            let blob_data = serde_utils::json_to_blob_data(&json_str, block_number).await?;
+            let blob_data = serde_utils::json_to_blob_data(&json_str, block_number, version).await?;
             
             println!("Writing blob to {}", output_file);
             blob_utils::write_biguint_to_file(&blob_data, &output_file)?;
@@ -469,15 +462,17 @@ async fn main() -> Result<()> {
         // Command: blob-to-dataJson
         // Converts a BigUint file to DataJson format
         "blob-to-dataJson" => {
-            if args.len() < 4 {
+            if args.len() < 5 {
                 eprintln!("Usage: orch-compression blob-to-dataJson <input_file> <output_file>");
                 eprintln!("  input_file - BigUint file to convert");
                 eprintln!("  output_file - File to write DataJson to");
+                eprintln!("  version - Version of the state update file (optional, default: 0.13.3)");
                 process::exit(1);
             }
             
             let input_file = &args[2];
             let output_file_name = &args[3];
+            let version = &args[4];
             
             // Create output directory
             let output_dir = "output/blob-to-dataJson";
@@ -488,7 +483,7 @@ async fn main() -> Result<()> {
             let blob_data = blob_utils::read_biguint_from_file(input_file)?;
             
             println!("Parsing state diffs from BigUint data");
-            let data_json = serde_utils::parse_state_diffs(&blob_data);
+            let data_json = serde_utils::parse_state_diffs(&blob_data, version);
             
             println!("Converting to JSON");
             let json_str = serde_utils::to_json(data_json);
@@ -532,6 +527,54 @@ async fn main() -> Result<()> {
             println!("Comparison complete. Report written to {}", output_path);
         },
         
+        // Command: stateless-decompression
+        // Decompresses a file containing BigUint data using stateless decompression
+        "stateless-decompression" => {
+            if args.len() < 4 {
+                eprintln!("Usage: orch-compression stateless-decompression <input_file> <output_file>");
+                eprintln!("  input_file - File containing BigUint data to decompress");
+                eprintln!("  output_file - File to write decompressed BigUint data to");
+                process::exit(1);
+            }
+            
+            let input_file = &args[2];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/stateless-decompression";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
+            
+            println!("Reading BigUint data from {}", input_file);
+            let biguint_data = blob_utils::read_biguint_from_file(input_file)?;
+            
+            println!("Converting BigUint data to Felt array");
+            let felt_data = match serde_utils::convert_biguints_to_felts(&biguint_data) {
+                Ok(data) => data,
+                Err(e) => {
+                    eprintln!("Error converting BigUint to Felt: {}", e);
+                    process::exit(1);
+                }
+            };
+            
+            println!("Performing stateless decompression");
+            let decompressed_felts = match stateless_compression::decompress(&felt_data) {
+                Ok(data) => data,
+                Err(e) => {
+                    eprintln!("Error during decompression: {}", e);
+                    process::exit(1);
+                }
+            };
+            
+            println!("Converting decompressed Felt data back to BigUint");
+            let decompressed_biguints = serde_utils::convert_to_biguint(&decompressed_felts);
+            
+            println!("Writing decompressed data to {}", output_file);
+            blob_utils::write_biguint_to_file(&decompressed_biguints, &output_file)?;
+            
+            println!("Stateless decompression completed successfully");
+        },
+        
         // Unknown command handler
         _ => {
             eprintln!("Unknown command: {}", args[1]);
@@ -546,6 +589,7 @@ async fn main() -> Result<()> {
             eprintln!("  json-to-blob <input_file> <output_file> - Convert a JSON state update file directly to a blob");
             eprintln!("  blob-to-dataJson <input_file> <output_file> - Convert a BigUint file to DataJson format");
             eprintln!("  compare-json <file1> <file2> <output_file> - Compare two DataJson files and output differences");
+            eprintln!("  stateless-decompression <input_file> <output_file> - Decompress a BigUint file using stateless decompression");
             process::exit(1);
         }
     }
