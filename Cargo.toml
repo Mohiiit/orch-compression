@@ -36,3 +36,13 @@ rayon = "1.10.0"
 httpmock = { version = "0.7.0" }
 mockall = "0.12.1"
 tempfile = "3.10.1"
+indexmap = "2.2.6"
+strum = { version = "0.26", features = ["derive"] }
+strum_macros = "0.26"
+thiserror = "1.0"
+
+[dev-dependencies]
+rstest = "0.18.2"
+num-integer = "0.1.46"
+assert_matches = "1.5.0"
+color-eyre = "0.6"

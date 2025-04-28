@@ -3,6 +3,7 @@ use std::collections::{HashMap, HashSet};
 
 use crate::models::{ClassDeclaration, ContractUpdate, DataJson, StorageUpdate, CompressedStateUpdate, StateDiff};
 use crate::compression;
+use crate::stateless_compression;
 use num_bigint::BigUint;
 use num_traits::{ToPrimitive, Zero};
 use serde_json;
@@ -341,24 +342,62 @@ pub async fn json_to_blob_data(json_str: &str, block_no: u64) -> Result<Vec<BigU
     println!("felts size is: {:?}", felts.len());
     
     // Convert Felt vector to BigUint vector
-    let biguints = convert_to_biguint(felts);
+    let biguints = convert_to_biguint(&felts);
     
     Ok(biguints)
 }
 
-pub fn convert_to_biguint(elements: Vec<Felt>) -> Vec<BigUint> {
-    // Initialize the vector with 4096 BigUint zeros
-    let mut biguint_vec = vec![BigUint::zero(); 4096];
+/// Converts a JSON string containing a StateUpdate to statelessly compressed blob data.
+///
+/// # Arguments
+/// * `json_str` - JSON string containing a StateUpdate
+/// * `block_no` - Block number for the state update
+///
+/// # Returns
+/// A Vec<BigUint> representing the compressed blob data.
+pub async fn json_to_stateless_compressed_blob_data(json_str: &str, block_no: u64) -> Result<Vec<BigUint>> {
+    // Parse the JSON into a StateUpdate
+    let state_update: StateUpdate = serde_json::from_str(json_str)
+        .map_err(|e| color_eyre::eyre::eyre!("Failed to parse JSON as StateUpdate: {}", e))?;
 
-    // Iterate over the elements and replace the zeros in the biguint_vec
-    for (i, element) in elements.iter().take(4096).enumerate() {
-        // Convert FieldElement to [u8; 32]
+    // Convert StateUpdate to Felt vector using the existing compression logic
+    let initial_felts = compression::state_update_to_blob_data(block_no, state_update).await?;
+    println!("Initial felts size: {:?}", initial_felts.len());
+
+    // Apply stateless compression
+    let compressed_felts = stateless_compression::compress(&initial_felts);
+    println!("Statelessly compressed felts size: {:?}", compressed_felts.len());
+
+    // Convert the compressed Felt vector to BigUint vector
+    let biguints = convert_to_biguint(&compressed_felts);
+
+    Ok(biguints)
+}
+
+pub fn convert_to_biguint(elements: &[Felt]) -> Vec<BigUint> {
+    let input_len = elements.len();
+    if input_len == 0 {
+        return Vec::new(); // Return empty vector for empty input
+    }
+
+    // Calculate the required output size: ceil(input_len / 4096.0) * 4096
+    // Integer division trick: (input_len + 4095) / 4096 gives the ceiling division result
+    let num_blocks = (input_len + 4095) / 4096;
+    let output_len = num_blocks * 4096;
+
+    // Initialize the vector with the calculated size, filled with zeros
+    let mut biguint_vec = vec![BigUint::zero(); output_len];
+
+    // Iterate over the input elements and place them in the output vector
+    for (i, element) in elements.iter().enumerate() { // Remove .take(4096)
+        // Convert Felt to [u8; 32]
         let bytes: [u8; 32] = element.to_bytes_be();
 
         // Convert [u8; 32] to BigUint
         let biguint = BigUint::from_bytes_be(&bytes);
 
-        // Replace the zero with the converted value
+        // Place the converted value at the correct index
+        // This automatically leaves remaining spots as zeros
         biguint_vec[i] = biguint;
     }
 

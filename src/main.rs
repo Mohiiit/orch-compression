@@ -6,6 +6,7 @@ mod compression;
 mod constants;
 mod models;
 mod serde_utils;
+mod stateless_compression;
 
 use color_eyre::eyre::Result;
 use dotenv::dotenv;
