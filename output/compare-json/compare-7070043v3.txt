@@ -1,0 +1,95 @@
+# Comparison of State Updates
+
+State Update Summary:
+- Total contracts in first file: 795
+- Total contracts in second file: 795
+- Contracts only in first file: 0
+- Contracts only in second file: 0
+- Contracts with differences: 8
+
+## Contracts with differences
+
+### Contract Address: 2287622340247220629832174774981402073178119753974735791117702397256593190986
+- Storage update differences:
+  - Storage keys only in first file: 17
+  - Storage keys only in second file: 0
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 2101777320744151332760599365104496482010904462391455581992693024316425571640, Value: 5000000000000000
+    - Key: 2524443904046747725618260838634309155539265579832313517057599392953303163695, Value: 10000000000000000
+    - Key: 2445759151920704674828657834674758274258892559564332031790718225517234281148, Value: 5000000000000000
+    - Key: 1009167329564577047446502909949094200097204606517186740928216821007505864974, Value: 5000000000000000
+    - Key: 359890691534151564555200761285262782971954529337779157229693488334118770908, Value: 10000000000000000
+    - ... and 12 more
+
+### Contract Address: 994093532263998342784832430808110506345064252807472522676582933739560724954
+- Storage update differences:
+  - Storage keys only in first file: 1
+  - Storage keys only in second file: 0
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 3467477725637516860295282017370190505710776156429942627453383486591917802164, Value: 1007259088303538331202064418335429989538952487346227322940332876863781288444
+
+### Contract Address: 433798901524464737383299427045524707319987006185988988961343075071036184551
+- Storage update differences:
+  - Storage keys only in first file: 0
+  - Storage keys only in second file: 1
+  - Storage keys with different values: 0
+  - Details of storage keys only in second file:
+    - Key: 2568890790829534189792141809301017797252610090793268707378047430116929880801, Value: 0
+
+### Contract Address: 1562518715206639122688055937427997528791381292737678114587525691088215017969
+- Storage update differences:
+  - Storage keys only in first file: 0
+  - Storage keys only in second file: 2
+  - Storage keys with different values: 0
+  - Details of storage keys only in second file:
+    - Key: 1271324687996937548555960802114534010228131167061980678541452745333987350511, Value: 0
+    - Key: 1789130432439400721732583908955980971556736602963460160908106459771666510459, Value: 0
+
+### Contract Address: 671689794509577448176835002556977092854056176967447147412763116645406873270
+- Storage update differences:
+  - Storage keys only in first file: 0
+  - Storage keys only in second file: 1
+  - Storage keys with different values: 0
+  - Details of storage keys only in second file:
+    - Key: 1287906787773344557047351702859397534945001174468201467614700126272341165606, Value: 0
+
+### Contract Address: 244412648846695662651997055209324363079612494798291330487779420933577612659
+- Storage update differences:
+  - Storage keys only in first file: 0
+  - Storage keys only in second file: 3
+  - Storage keys with different values: 0
+  - Details of storage keys only in second file:
+    - Key: 2834794632055619654974437067866243973003827161308147333556690583471875102178, Value: 0
+    - Key: 2834794632055619654974437067866243973003827161308147333556690583471875102179, Value: 0
+    - Key: 2104095501327893775793568401362714852256819391970653008391501480769538628918, Value: 0
+
+### Contract Address: 2239120320348836983605509795944962661804332701034918325290210536536885556258
+- Storage update differences:
+  - Storage keys only in first file: 1
+  - Storage keys only in second file: 1
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 774384897594122312880658117738415664011218342276877129177605475212893134827, Value: 1
+  - Details of storage keys only in second file:
+    - Key: 3375502781793872254242333479199519162025168173129541910659614352442524729559, Value: 0
+
+### Contract Address: 1098477448186174453525573134670707360616255965097091756745113678697456377684
+- Storage update differences:
+  - Storage keys only in first file: 0
+  - Storage keys only in second file: 2
+  - Storage keys with different values: 0
+  - Details of storage keys only in second file:
+    - Key: 982493438284908181176533518065925811522062917238407090398272253368907664500, Value: 0
+    - Key: 15309012703167645080076244813674706738539034016261188166024750552722221140, Value: 0
+
+
+# Comparison of Class Declarations
+
+Class Declaration Summary:
+- Total class declarations in first file: 32
+- Total class declarations in second file: 32
+- Class declarations only in first file: 0
+- Class declarations only in second file: 0
+

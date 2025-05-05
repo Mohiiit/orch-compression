@@ -1,0 +1,49 @@
+# Comparison of State Updates
+
+State Update Summary:
+- Total contracts in first file: 795
+- Total contracts in second file: 795
+- Contracts only in first file: 0
+- Contracts only in second file: 0
+- Contracts with differences: 3
+
+## Contracts with differences
+
+### Contract Address: 2287622340247220629832174774981402073178119753974735791117702397256593190986
+- Storage update differences:
+  - Storage keys only in first file: 17
+  - Storage keys only in second file: 0
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 523418437069583686609197762008205097625573949177556814262595757710844409622, Value: 10000000000000000
+    - Key: 1289458651049475993593461600723190401007078735132802963686266847688359580257, Value: 5000000000000000
+    - Key: 2101777320744151332760599365104496482010904462391455581992693024316425571640, Value: 5000000000000000
+    - Key: 1009167329564577047446502909949094200097204606517186740928216821007505864974, Value: 5000000000000000
+    - Key: 2610634486146000637622591113784515721720155446188829899048270036918720889531, Value: 5000000000000000
+    - ... and 12 more
+
+### Contract Address: 994093532263998342784832430808110506345064252807472522676582933739560724954
+- Storage update differences:
+  - Storage keys only in first file: 1
+  - Storage keys only in second file: 0
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 3467477725637516860295282017370190505710776156429942627453383486591917802164, Value: 1007259088303538331202064418335429989538952487346227322940332876863781288444
+
+### Contract Address: 2239120320348836983605509795944962661804332701034918325290210536536885556258
+- Storage update differences:
+  - Storage keys only in first file: 1
+  - Storage keys only in second file: 0
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 774384897594122312880658117738415664011218342276877129177605475212893134827, Value: 1
+
+
+# Comparison of Class Declarations
+
+Class Declaration Summary:
+- Total class declarations in first file: 32
+- Total class declarations in second file: 32
+- Class declarations only in first file: 0
+- Class declarations only in second file: 0
+

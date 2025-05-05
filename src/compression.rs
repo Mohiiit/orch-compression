@@ -457,8 +457,7 @@ fn merge_contract_updates(existing_update: &mut ContractUpdate, new_update: Cont
 /// 
 /// # Returns
 /// A JSON string with all state updates merged
-pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>, version: &str) -> color_eyre::Result<String> {
-    // Maps to track latest state by contract address
+pub async fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>, version: &str) -> color_eyre::Result<String> {
     let mut state_updates = Vec::new();
     
     // Process files in order of block number
@@ -470,11 +469,11 @@ pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>, version
         let state_update: StateUpdate = serde_json::from_str(&file_content)
             .map_err(|e| color_eyre::eyre::eyre!("Failed to parse state update file: {}", e))?;
         
-        state_updates.push(state_update);
+        state_updates.push((state_update, block_num));
     }
     
     // Merge state updates
-    let merged_update = merge_starknet_state_updates(state_updates, version)?;
+    let merged_update = merge_starknet_state_updates(state_updates, version).await?;
     
     // Serialize to JSON string
     let json_string = serde_json::to_string_pretty(&merged_update)
@@ -490,16 +489,33 @@ pub fn merge_state_update_files_to_json(file_paths: Vec<(PathBuf, u64)>, version
 /// 
 /// # Returns
 /// A single merged StateUpdate
-fn merge_starknet_state_updates(updates: Vec<StateUpdate>, version: &str) -> color_eyre::Result<StateUpdate> {
+pub async fn merge_starknet_state_updates(updates: Vec<(StateUpdate, u64)>, version: &str) -> color_eyre::Result<StateUpdate> {
     if updates.is_empty() {
         return Err(color_eyre::eyre::eyre!("No state updates to merge"));
     }
+
+    let rpc_url = env::var("STARKNET_RPC_URL")
+    .unwrap_or_else(|_| "https://pathfinder-madara-ci.karnot.xyz".to_string());
+
+    println!("Using RPC URL: {}", rpc_url);
+
+    // Create Starknet provider
+    let provider = JsonRpcClient::new(HttpTransport::new(
+        Url::parse(&rpc_url).map_err(|e| color_eyre::eyre::eyre!("Invalid URL: {}", e))?,
+    ));
     
+    // Find the lowest block number to determine pre-range block
+    let pre_range_block = updates.iter()
+        .map(|(_, block_num)| *block_num)
+        .min()
+        .unwrap_or(0)
+        .saturating_sub(1);
+
     // Take the last block hash and number from the last update as our "latest"
-    let last_update = updates.last().unwrap();
+    let last_update = updates.last().unwrap().0.clone();
     let block_hash = last_update.block_hash;
     let new_root = last_update.new_root;
-    let old_root = updates.first().unwrap().old_root;
+    let old_root = updates.first().unwrap().0.old_root;
     
     // Create a new StateDiff to hold the merged state
     let mut state_diff = StateDiff {
@@ -520,7 +536,7 @@ fn merge_starknet_state_updates(updates: Vec<StateUpdate>, version: &str) -> col
     let mut deprecated_classes_set: HashSet<Felt> = HashSet::new();
     
     // Process each update in order
-    for update in updates {
+    for (update, _) in updates {
         // Process storage diffs
         for contract_diff in update.state_diff.storage_diffs {
             let contract_addr = contract_diff.address;
@@ -560,16 +576,45 @@ fn merge_starknet_state_updates(updates: Vec<StateUpdate>, version: &str) -> col
     }
     
     // Convert maps back to the required StateDiff format
-    
+    let mut no_of_contracts = 0;
     // Storage diffs
     for (contract_addr, storage_map) in storage_diffs_map {
-        let storage_entries = storage_map
-            .into_iter()
-            .filter(|(_, value)| *value != Felt::ZERO) // Filter out entries with value 0x0
-            .map(|(key, value)| StorageEntry { key, value })
-            .collect::<Vec<_>>();
+        let mut storage_entries = Vec::new();
+        
+        // First check if contract existed at pre-range block
+        let contract_existed = check_contract_existed_at_block(
+            &provider,
+            contract_addr,
+            pre_range_block
+        ).await;
+
+        for (key, value) in storage_map {
+            if contract_existed {
+                // Only check pre-range value if contract existed
+                let pre_range_value = check_pre_range_storage_value(
+                    &provider,
+                    contract_addr,
+                    key,
+                    pre_range_block
+                ).await?;
+
+                // Only include if values are different
+                if pre_range_value != value {
+                    storage_entries.push(StorageEntry { key, value });
+                }
+            } else {
+                // Contract didn't exist, so pre-range value was definitely 0
+                // Only include non-zero values
+                println!("Contract {} didn't exist at block {}, so pre-range value was definitely 0", contract_addr, pre_range_block);
+                if value != Felt::ZERO {
+                    storage_entries.push(StorageEntry { key, value });
+                }
+            }
+            no_of_contracts += 1;
+            println!("No of contracts done: {}", no_of_contracts);
+        }
             
-        // Only include contracts that have non-zero storage entries
+        // Only include contracts that have storage entries
         if !storage_entries.is_empty() {
             let contract_storage_diff = ContractStorageDiffItem {
                 address: contract_addr,
@@ -796,5 +841,37 @@ pub async fn json_to_blob_data(json_file_path: &str, block_no: u64) -> color_eyr
     
     // Convert the state update to blob data
     state_update_to_blob_data(block_no, state_update, "0.13.3").await
+}
+
+pub async fn check_contract_existed_at_block(
+    provider: &JsonRpcClient<HttpTransport>,
+    contract_address: Felt,
+    block_number: u64,
+) -> bool {
+    match provider
+        .get_class_at(BlockId::Number(block_number), contract_address)
+        .await {
+            Ok(_) => true,
+            Err(_) => false
+        }
+}
+
+pub async fn check_pre_range_storage_value(
+    provider: &JsonRpcClient<HttpTransport>,
+    contract_address: Felt,
+    key: Felt,
+    pre_range_block: u64,
+) -> color_eyre::Result<Felt> {
+    // Get storage value at the block before our range
+    match provider
+        .get_storage_at(contract_address, key, BlockId::Number(pre_range_block))
+        .await {
+            Ok(value) => Ok(value),
+            Err(e) => {
+                println!("Warning: Failed to get pre-range storage value for contract: {}, key: {} at block {}: {}", 
+                    contract_address, key, pre_range_block, e);
+                Ok(Felt::ZERO)
+            }
+        }
 }
 

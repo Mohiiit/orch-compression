@@ -5,7 +5,7 @@ use crate::models::{ClassDeclaration, ContractUpdate, DataJson, StorageUpdate, C
 use crate::compression;
 use crate::stateless_compression;
 use num_bigint::BigUint;
-use num_traits::{ToPrimitive, Zero};
+use num_traits::{ToPrimitive, Zero, Num};
 use serde_json;
 use color_eyre::eyre::Result;
 use serde::Serialize;
@@ -132,14 +132,21 @@ pub fn parse_state_diffs(data: &[BigUint], version: &str) -> DataJson {
             println!("Warning: Reached end of data while reading contract updates");
             break;
         }
+
+        let mut do_show = false;
         
         let address = data[i].clone();
+
+        if address == BigUint::from_str_radix("239581092100565142154720645091883797094198622446298991221224471056964065863", 10).expect("Invalid address") {
+            do_show = true
+        }
+
         if address == BigUint::zero() {
             break;
         }
         i += 1;
         
-        if i >= data.len() || i >= BLOB_LEN - 1 {
+        if i >= data.len() {
             println!("Warning: Reached end of data or blob length limit");
             break;
         }
@@ -147,6 +154,9 @@ pub fn parse_state_diffs(data: &[BigUint], version: &str) -> DataJson {
         let info_word = &data[i];
         let (nonce, number_of_storage_updates, class_flag) = if is_new_version {
             let (new_nonce, storage_updates, class_flag) = extract_bits_v2(info_word);
+            if do_show {
+                println!("given the right address, here are the new_noce, storage_updates, class_flag: {:?}, {:?}, {:?}", new_nonce, storage_updates, class_flag);
+            }
             (new_nonce, storage_updates, class_flag)
         } else {
             let (class_flag, nonce, storage_updates) = extract_bits(info_word);
@@ -169,7 +179,7 @@ pub fn parse_state_diffs(data: &[BigUint], version: &str) -> DataJson {
         
         let mut storage_updates = Vec::new();
         for _ in 0..number_of_storage_updates {
-            if i + 1 >= data.len() || i >= BLOB_LEN - 1 {
+            if i + 1 >= data.len() {
                 println!("Warning: Reached end of data or blob length limit while reading storage updates");
                 break;
             }
@@ -218,7 +228,7 @@ pub fn parse_state_diffs(data: &[BigUint], version: &str) -> DataJson {
         }
         i += 1;
         
-        if i >= data.len() || i >= BLOB_LEN - 1 {
+        if i >= data.len() {
             println!("Warning: Reached end of data or blob length limit while reading compiled class hash");
             break;
         }

@@ -409,7 +409,7 @@ async fn main() -> Result<()> {
             println!("Found {} state update files, processing in block order", state_update_files.len());
             
             // Merge state updates from all files to JSON
-            let json_str = match compression::merge_state_update_files_to_json(state_update_files, version) {
+            let json_str = match compression::merge_state_update_files_to_json(state_update_files, version).await {
                 Ok(json) => json,
                 Err(e) => {
                     eprintln!("Error merging state updates: {}", e);
