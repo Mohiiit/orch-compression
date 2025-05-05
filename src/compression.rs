@@ -610,8 +610,6 @@ pub async fn merge_starknet_state_updates(updates: Vec<(StateUpdate, u64)>, vers
                     storage_entries.push(StorageEntry { key, value });
                 }
             }
-            no_of_contracts += 1;
-            println!("No of contracts done: {}", no_of_contracts);
         }
             
         // Only include contracts that have storage entries
@@ -623,6 +621,8 @@ pub async fn merge_starknet_state_updates(updates: Vec<(StateUpdate, u64)>, vers
             
             state_diff.storage_diffs.push(contract_storage_diff);
         }
+        no_of_contracts += 1;
+        println!("No of contracts done: {}", no_of_contracts);
     }
     
     // Deployed contracts
