@@ -1,0 +1,116 @@
+{
+  "block_hash": "0x42a3550f01dc95471a13493a4676add9628f9697e9b71bdd86e2f82d1bd816f",
+  "old_root": "0x1f98e6f32098dd3be5367f0069f251d0e01df488fdab31f99e09c31f955ede4",
+  "new_root": "0x25dfc445e8ff15cc7dfe57ffd7f9e680f98d224c22b47274e05274224681921",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x7ba7217143609eb75c28ea897715fcd13fb969810f0388e81cbb20a582851db",
+            "value": "0x675c5cd9a5b80c4f02"
+          },
+          {
+            "key": "0x39b007cbbc41dd4690791a49a6694bbdd30ad1e74fe84a7b3f37ce8b6bbb8a1",
+            "value": "0xfe9fde6d941c770edd5a"
+          },
+          {
+            "key": "0x226880c3eb65c83c24935f17ecde21b63f964f4e416fd437c11e841ae28b217",
+            "value": "0x4e3a249ac8f623502"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d05172107ea72f856c"
+          }
+        ]
+      },
+      {
+        "address": "0x2ebbebb8ceb2e07f30a5088f5849afd4f908f04f3f9c97c694e5d83d2a7cc61",
+        "storage_entries": [
+          {
+            "key": "0x206a9cfb3d896fb03428a7fae8533631e9b6f062c60d57149e0c9a961b4b1cf",
+            "value": "0x65142513a70b47e4dbd"
+          }
+        ]
+      },
+      {
+        "address": "0x3745ab04a431fc02871a139be6b93d9260b0ff3e779ad9c8b377183b23109f1",
+        "storage_entries": [
+          {
+            "key": "0x2006f263c87d92061db4b88b71f7b592e89c3333dbc26ca57aab5dae8455766",
+            "value": "0x2b8fc913b81147f26067"
+          },
+          {
+            "key": "0x2754adac3b696f23c64b26ffbb165390ac3e4f391fbc8cd88b2cdcff5783668",
+            "value": "0x910fc72f66bb07b68c"
+          },
+          {
+            "key": "0x2754adac3b696f23c64b26ffbb165390ac3e4f391fbc8cd88b2cdcff5783667",
+            "value": "0x10bc5add1a38525ec4a7c412c"
+          },
+          {
+            "key": "0x2754adac3b696f23c64b26ffbb165390ac3e4f391fbc8cd88b2cdcff578366b",
+            "value": "0x1e8ec36f744c3598f7cd"
+          },
+          {
+            "key": "0x514ebdb2e2bf179391e9aeec6ba3cc29369738da0670aaf3862d897f84b7978",
+            "value": "0x67bf0eb9"
+          },
+          {
+            "key": "0x514ebdb2e2bf179391e9aeec6ba3cc29369738da0670aaf3862d897f84b7979",
+            "value": "0x98a7d9b8314c000"
+          }
+        ]
+      },
+      {
+        "address": "0xd251425253065003e81a744e1b500d1225248989485a9408a6ffd9e5c3530d",
+        "storage_entries": [
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca46",
+            "value": "0x166a4a9edb018fa"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca45",
+            "value": "0x10bc5add1a38525ec4a7c412c"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca49",
+            "value": "0x1"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca44",
+            "value": "0x1c9f78d2893e4000"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca48",
+            "value": "0x98a7d9b8314c000"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca4a",
+            "value": "0x67bf0eb9"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86baf",
+            "value": "0x157f720f6c8c6fa5a05d637a3381d2c34d5bc8e5f67eb56fd2f2dff281427b2"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x7573e9ba6dc57227175a83918c7472309b893cabd22730e2babac3f6bcc254e",
+        "nonce": "0x17"
+      }
+    ]
+  }
+}

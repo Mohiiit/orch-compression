@@ -1,0 +1,75 @@
+{
+  "block_hash": "0x47d80596907017f28cb223f2841b46558e85964ab41f10b7925a67e6b58b6c4",
+  "old_root": "0x677f2a703be73e3cf6512a4a54d881d81463b519a3c20112e53e62c985418c",
+  "new_root": "0x778ae4649a5061dd3b32c0dd0ae895250a149493fed533f654e0172ee4b7794",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f78aa3a023eb0a81"
+          },
+          {
+            "key": "0x24c6467dea5356205a0808ba01a7cccb1b22cf4ae669618f9961d7c2a42d90c",
+            "value": "0x152dab145dc9aff6"
+          }
+        ]
+      },
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x24c6467dea5356205a0808ba01a7cccb1b22cf4ae669618f9961d7c2a42d90c",
+            "value": "0x1d6d866f890467798a"
+          },
+          {
+            "key": "0x8c24261fcf460ca360a5f5abc8f31716249d491e20a4661ee699f76944c308",
+            "value": "0x2b05699353b60000"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x24c6467dea5356205a0808ba01a7cccb1b22cf4ae669618f9961d7c2a42d90c",
+            "value": "0x14f"
+          },
+          {
+            "key": "0x213268ce9eeedab3063abcfaa7953380d45a298051c11b5f4e858874efe5446",
+            "value": "0x14d"
+          },
+          {
+            "key": "0x8c24261fcf460ca360a5f5abc8f31716249d491e20a4661ee699f76944c308",
+            "value": "0x14e"
+          },
+          {
+            "key": "0x0",
+            "value": "0x150"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86ad7",
+            "value": "0x160039261242a398b8d796ba216ca3b52cf1f0d3fa70218a3ea7f82c3fba900"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x213268ce9eeedab3063abcfaa7953380d45a298051c11b5f4e858874efe5446",
+        "nonce": "0x36a4"
+      }
+    ]
+  }
+}

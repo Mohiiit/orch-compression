@@ -1,0 +1,237 @@
+{
+  "block_hash": "0x310b75eab1ee31f2abdf8900b1e4c3b11365601098c226ea1a2d683c09064b5",
+  "old_root": "0x72ca55cee2c6f26fa6cf700e608d8e9923e25cf52aefbaea04bc3e8e6dc3245",
+  "new_root": "0x541994df61aa4815669690944d2e7b5ac7ecea9cdb46c0defaa28f372d2dc02",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x58298e58876a3aa708a85d8f5c46a6efc74afc131db695878e2822a7ab7493b",
+            "value": "0xb0850401c26b"
+          },
+          {
+            "key": "0x72db3c0c8d1e37c1f7aed6be16df43be8a3b421e60872dda667440be5dd15ca",
+            "value": "0x529f797c69a965c9"
+          },
+          {
+            "key": "0x5c803319cd419330a4e4dc40806ecb0fcbcd7b6daa1bbd6945335d692ede38d",
+            "value": "0x534167a9f5f4034b"
+          },
+          {
+            "key": "0x441c34c429b0c133b2643070c8ce60ddb77f464aa6d67e87676e28ca5a8170e",
+            "value": "0x5355d6b1edd5dec0"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f7ed5575e98e851b"
+          },
+          {
+            "key": "0x15a1987fd60bca3dd91c725dd4f7d12860b55ff205d525297bb291dbe20ad2d",
+            "value": "0x52c0b98e28ef198a"
+          },
+          {
+            "key": "0x5d3871e7346a9f3ba37be5cedef2e51158fbc667a62df87749ef2843f1f26b2",
+            "value": "0xb0850401c26b"
+          },
+          {
+            "key": "0x773e9941c84b25b64d1476efa3619c21cd18428e68dff8884d738e77335b3ca",
+            "value": "0x52d05d4c9f10cd04"
+          },
+          {
+            "key": "0x79d84db4d505ca2f73f9ff389f8a3596455bdd7507d54ffb23cdb2ad8a76fa",
+            "value": "0x60f928b572c41c7d"
+          }
+        ]
+      },
+      {
+        "address": "0x500c401aa2403a36d40bca5e005be4ecf98a7842906cf6590b860082f265b95",
+        "storage_entries": [
+          {
+            "key": "0x495ce7b0ce9f7fe840cee2beb37ec050550a42a7e01586157280fabd14ee893",
+            "value": "0x67bf2048"
+          },
+          {
+            "key": "0x6b4c6b7a911c57397d1860f0b2115c25bc1ac0537bf2414cd690fc12f47f938",
+            "value": "0x32"
+          },
+          {
+            "key": "0x76d2ec10f2ebe85b3e7956940c48a398959197b1cc99c4925465e3f97547c9a",
+            "value": "0x67bf2048"
+          },
+          {
+            "key": "0x70c74caeb65cea883bd27278759e3c426b448b94d4cb779aa4fd69e637f2063",
+            "value": "0x32"
+          },
+          {
+            "key": "0x561535e2f3df98c4bee374089cd1156fc3ec776707d18bdb047553c46067067",
+            "value": "0x5"
+          },
+          {
+            "key": "0x39ccf2b0f3f7403bce706beb1601c548f5247ff7c4738796dcfbffee431ee2",
+            "value": "0x5"
+          }
+        ]
+      },
+      {
+        "address": "0x7984bff723a1ebfc4ddedf168e7d726129edb254f23df1c710d6d260ea3f82",
+        "storage_entries": [
+          {
+            "key": "0x2baf255f239cf5f4c7651c9a2ae9ee4f3bdeb26f28664af0da4720a9921a587",
+            "value": "0x1b1a7761284d65768078e96de23e8625c52ea08cecc28f0c0f75e5312fcb86"
+          },
+          {
+            "key": "0x3a80c2478f90b9176294eab3f7963a4dbf86e70cfd10625bc868fa5761597cd",
+            "value": "0x1b1a7761284d65768078e96de23e8625c52ea08cecc28f0c0f75e5312fcb86"
+          },
+          {
+            "key": "0x31cbedee36202136b7d4adbb536067e831e6e8474dd76306fda3e729b3758f9",
+            "value": "0x5866bc0f713c16b666719ab71adb94fd1e2158c3e3a07d4c35c74eb42bc7b4b"
+          },
+          {
+            "key": "0x5a477c65b6caf24f336893ba20a4cca80f730437b7c5dbedb23b21d6c6d332b",
+            "value": "0x1dacf9b99592504551aa91514b141da6b57bdc92c6c368aa4b8ae6b5cb4cd23"
+          },
+          {
+            "key": "0x466109d5deccf087023665fded4d896c2a2f27c2452515515ab83d73eecec4c",
+            "value": "0x1dacf9b99592504551aa91514b141da6b57bdc92c6c368aa4b8ae6b5cb4cd23"
+          },
+          {
+            "key": "0x320ba50698808afb87766d38c527a3c1913c99b7b8158561f0c4a6eb4faaabb",
+            "value": "0x1b1a7761284d65768078e96de23e8625c52ea08cecc28f0c0f75e5312fcb86"
+          },
+          {
+            "key": "0x2d4fe0e3dd7a012d0ee5a59a2b1496c7e472385f3afc55c5e172a01f243b516",
+            "value": "0x1dacf9b99592504551aa91514b141da6b57bdc92c6c368aa4b8ae6b5cb4cd23"
+          },
+          {
+            "key": "0x46ea3a20379dfd4647479a75eca385ebc384e13c85ce2c1d2cb4075a45d894f",
+            "value": "0x1b1a7761284d65768078e96de23e8625c52ea08cecc28f0c0f75e5312fcb86"
+          },
+          {
+            "key": "0x385f67ec37f20b8f8789074bddee46a7c980fa9beb370083943faa362469082",
+            "value": "0x5866bc0f713c16b666719ab71adb94fd1e2158c3e3a07d4c35c74eb42bc7b4b"
+          },
+          {
+            "key": "0x9778b72d66ce1270e3e348f3ef928a3fc34aa90c1098df71a472abbc23c043",
+            "value": "0x1b1a7761284d65768078e96de23e8625c52ea08cecc28f0c0f75e5312fcb86"
+          }
+        ]
+      },
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x14ef16ae40c3041a0d8a3f068e1bca0d2ea854cc59162bed84fcc492c70b7ac",
+            "value": "0x21c28c6419c79064638"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d367180e0cb8c178b2"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86c1e",
+            "value": "0x3a1b40b1ad1ac59365983ef05a9ed3dc27e96aa7027ac72ec15382873f722c1"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x0",
+            "value": "0x1012"
+          },
+          {
+            "key": "0x6b4c6b7a911c57397d1860f0b2115c25bc1ac0537bf2414cd690fc12f47f938",
+            "value": "0x100f"
+          },
+          {
+            "key": "0x58298e58876a3aa708a85d8f5c46a6efc74afc131db695878e2822a7ab7493b",
+            "value": "0x100a"
+          },
+          {
+            "key": "0x495ce7b0ce9f7fe840cee2beb37ec050550a42a7e01586157280fabd14ee893",
+            "value": "0x100d"
+          },
+          {
+            "key": "0x70c74caeb65cea883bd27278759e3c426b448b94d4cb779aa4fd69e637f2063",
+            "value": "0x1010"
+          },
+          {
+            "key": "0x2c4699b799a896cfc8719d85415a65b9ad24fd5e24f41ac38d794c1b4dae7c6",
+            "value": "0x1009"
+          },
+          {
+            "key": "0x76d2ec10f2ebe85b3e7956940c48a398959197b1cc99c4925465e3f97547c9a",
+            "value": "0x1011"
+          },
+          {
+            "key": "0x561535e2f3df98c4bee374089cd1156fc3ec776707d18bdb047553c46067067",
+            "value": "0x100e"
+          },
+          {
+            "key": "0x39ccf2b0f3f7403bce706beb1601c548f5247ff7c4738796dcfbffee431ee2",
+            "value": "0x100c"
+          },
+          {
+            "key": "0x5d3871e7346a9f3ba37be5cedef2e51158fbc667a62df87749ef2843f1f26b2",
+            "value": "0x100b"
+          },
+          {
+            "key": "0x149d5bbc53bca2a062ae330c855bdfd41a47c2f6f78d84c479d46b8784eec15",
+            "value": "0x1008"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0xba9a45e9ab7fc6de12fe54fcd3d964e665fafcea10bc50e0db71b61c9a611d",
+        "nonce": "0x596"
+      },
+      {
+        "contract_address": "0x745d525a3582e91299d8d7c71730ffc4b1f191f5b219d800334bc0edad0983b",
+        "nonce": "0x47"
+      },
+      {
+        "contract_address": "0x1616ee5b727acee6fe6498610904f0a985739c8b495d1cd72591d0a0b3690d6",
+        "nonce": "0x108"
+      },
+      {
+        "contract_address": "0x4ae792b3cd5fc140ac7723caf0a60fd421e4c5c6360b7bdf1430e72bc39a260",
+        "nonce": "0x97"
+      },
+      {
+        "contract_address": "0x55bdcd43cd9172d7aa0a328f28a8ec221ff16a39f5a793b2e7cf0bc2ebc631b",
+        "nonce": "0x59a"
+      },
+      {
+        "contract_address": "0x17ee2558d6013eb4444ba9759c8d6a72594ab2002f08598bfa388f69049cafb",
+        "nonce": "0x73f"
+      },
+      {
+        "contract_address": "0x2c4699b799a896cfc8719d85415a65b9ad24fd5e24f41ac38d794c1b4dae7c6",
+        "nonce": "0x6"
+      },
+      {
+        "contract_address": "0x149d5bbc53bca2a062ae330c855bdfd41a47c2f6f78d84c479d46b8784eec15",
+        "nonce": "0x6"
+      },
+      {
+        "contract_address": "0x2b575b509784df9288cd71f7e2a7e233b9d905702e833dcedc90b7cd0706415",
+        "nonce": "0x590"
+      }
+    ]
+  }
+}

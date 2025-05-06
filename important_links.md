@@ -14,3 +14,21 @@
 - **Transaction:** [0x089499bde446a1d1730e7f684eac299b3f2e07c8c86e1d16ee06931c1e1fc465](https://sepolia.etherscan.io/tx/0x089499bde446a1d1730e7f684eac299b3f2e07c8c86e1d16ee06931c1e1fc465)
 - **Starknet-Sepolia Block Range:** 309146-309401 (256 blocks)
 
+
+## Starknet 0.13.4
+
+the flow: state-update -> merge multiple -> do statefull compression -> change to blob data -> do stateless compression -> fft -> final
+
+what's we gonna do?
+
+state-update -> merge multiple -> do statefull compression -> change to blob data -> dataJSON
+
+blob -> ifft -> stateless decompression -> dataJSON
+
+and we match both in the end
+
+### Example 1: Multi-blocks and multi-blobs
+- **Transaction:** [0xb59bd757065a4ac72a0795beb886c167631f136f71915552794007ed8c22f374](https://sepolia.etherscan.io/tx/0xb59bd757065a4ac72a0795beb886c167631f136f71915552794007ed8c22f374)
+- **Starknet-sepolia block range:** 551629-552012 (384 blocks)
+
+**IMP:** do ifft on individual blocks and then merge the output and then do stateless decompression

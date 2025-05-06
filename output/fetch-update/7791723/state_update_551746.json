@@ -1,0 +1,71 @@
+{
+  "block_hash": "0x6a67013ddc60e126f96c82e168ff3aeae58e5669ebae6e43f918e29b1b04c90",
+  "old_root": "0x3f66341cd822d75aa153d8d53f03415962c4135c341ad5a9f3440f905a21a4c",
+  "new_root": "0x4bef979b66dd7f4f0c26f54c16db7e87a4bce43dc2b27e4d6eaa36ee2505376",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x4fc942a95fe429b47bbfe4b2c3c7712066753d7da0a4fde99f6a6f8081d50ea",
+            "value": "0x71afd498d0321"
+          },
+          {
+            "key": "0x110e2f729c9c2b988559994a3daccd838cf52faf88e18101373e67dd061455a",
+            "value": "0x16b53d0bda327b6b6729"
+          }
+        ]
+      },
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x52a0154d11f23441d66286421a3343f0bc55c03c8908708211be009c9eb63a2",
+            "value": "0x7757c7fa444a5a6b8"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d028540b1922076f13"
+          },
+          {
+            "key": "0x527b970651eb7adde366bf09b8c7b81a520a8c60c02dd11e1566dc23abbf29f",
+            "value": "0x7da1ee4c01125f058"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x4fc942a95fe429b47bbfe4b2c3c7712066753d7da0a4fde99f6a6f8081d50ea",
+            "value": "0x5e1"
+          },
+          {
+            "key": "0x0",
+            "value": "0x5e2"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86b38",
+            "value": "0x1d38a21c0a324accd40b960a91f6326730f7c2251a04b9fb42fcbf72bf47844"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x289d043f145d6f23b35a2bb2360ecd1b62a588c2bd72009bef23d43f4ff3ba1",
+        "nonce": "0x5"
+      }
+    ]
+  }
+}

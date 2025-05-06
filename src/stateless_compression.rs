@@ -591,7 +591,9 @@ fn unpack_felt(
     let mut res = Vec::with_capacity(n_elms);
     let mut current_felt_big = felt_to_big_uint(&packed_felt);
     let elm_bound_big = BigUint::from(elm_bound);
-
+    println!("current_felt_big: {}", current_felt_big);
+    println!("elm_bound_big: {}", elm_bound_big);
+    println!("n_elms: {}", n_elms);
     for _ in 0..n_elms {
         // Use BigUint division and remainder
         let remainder_big = &current_felt_big % &elm_bound_big;
@@ -599,6 +601,7 @@ fn unpack_felt(
         res.push(element);
         current_felt_big /= &elm_bound_big; // Integer division
     }
+
 
     if !current_felt_big.is_zero() {
          // Python asserts packed_felt == 0 here. Let's make it an error.

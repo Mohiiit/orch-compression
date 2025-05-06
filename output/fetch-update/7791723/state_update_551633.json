@@ -1,0 +1,41 @@
+{
+  "block_hash": "0x294d2812971927860556f2b6e8d9e9378120e6f27bf7903ddf7084cb28e7354",
+  "old_root": "0x6f63e65ff48fe71d269c98d4e794c79cc93355239399e379780b4ea228c1612",
+  "new_root": "0x612d54516008d4ece0c456800e7ea6a5085bf48ceb253e130eef39ad6855dbc",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x129383051a3c42bc5f38431e7abdb83137547492dff9cd3814e61cd68e95423",
+            "value": "0xaaa2103bb49248fa42"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d01279cd2cba22d4d4"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86ac7",
+            "value": "0x77862f1a322335b9cfc2a2fad10b777313f7e026fc5df4cacc8aa79de3c40ea"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x7c1cbbafca15fec62f943de72793ddd40c0ae92884354e301cdd610f7c90106",
+        "nonce": "0x860f"
+      }
+    ]
+  }
+}

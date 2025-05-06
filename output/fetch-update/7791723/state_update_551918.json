@@ -1,0 +1,50 @@
+{
+  "block_hash": "0x62512daec110e683cf801aea2cc9798cb0a90cc09c0c6103a1d0de4e43efe2c",
+  "old_root": "0x3304e688c553013732d94dafe6d8224a86ed652de3e4d1d57bd123ddcef176e",
+  "new_root": "0x3fbc93f2188b4805ca1b81d88a140d8918a0ab5fd14e30a092d189de7b7f3f0",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f7a1e23a6caaa930"
+          },
+          {
+            "key": "0xd2d273c99da1c8e98e683213c4fa8f72c944aa1560ab4a1467e5a5d39fd7df",
+            "value": "0x4f09dc25c8466b2b7"
+          }
+        ]
+      },
+      {
+        "address": "0x12d400242a4f59b144666adf62f177f7e3a672932d5a2cae92f58488240bdb6",
+        "storage_entries": [
+          {
+            "key": "0x1423760c9650eb549b1615f6cf96d420e32aadcea2ff5fe11c26457244adcc1",
+            "value": "0x1"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86be4",
+            "value": "0x13d2a86cfdb38aeca1ecf427e8511324a6ea79d28983e8c758e50e48af1d2e9"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0xf9e998b2853e6d01f3ae3c598c754c1b9a7bd398fec7657de022f3b778679",
+        "nonce": "0x8850"
+      }
+    ]
+  }
+}

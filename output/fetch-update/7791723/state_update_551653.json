@@ -1,0 +1,116 @@
+{
+  "block_hash": "0x764a55e670e9a0dacbf691849b826d18eeeb2c156f8bb76ebd9c4f73bc1d2e1",
+  "old_root": "0x78e919804980fe49cad50cf526a4ef29bbc412f91653cca3eda230dbd1661be",
+  "new_root": "0x545404dd9d22dd0457df9c06b82c67202388e2277e8bdf644f614bec0124b59",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x2ebbebb8ceb2e07f30a5088f5849afd4f908f04f3f9c97c694e5d83d2a7cc61",
+        "storage_entries": [
+          {
+            "key": "0x206a9cfb3d896fb03428a7fae8533631e9b6f062c60d57149e0c9a961b4b1cf",
+            "value": "0x64cf67923c037b86bff"
+          }
+        ]
+      },
+      {
+        "address": "0x250add07132b3db2a9df4fac67c024bd347347ec3ab13073dd44dc1103c0ee8",
+        "storage_entries": [
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca44",
+            "value": "0x4e1003b28d928000"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca46",
+            "value": "0x1be1f94135a99ec"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca45",
+            "value": "0x10bbcd2cad9f5a5cfea35c48c"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca49",
+            "value": "0x1"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca48",
+            "value": "0x1a055690d9db8000"
+          },
+          {
+            "key": "0x5c6d81d326212dc34c3fc9a5d9f883b4b8c5ab651f1b9a4aaeb638c6bd5ca4a",
+            "value": "0x67bee953"
+          }
+        ]
+      },
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x226880c3eb65c83c24935f17ecde21b63f964f4e416fd437c11e841ae28b217",
+            "value": "0x58f1b0fdb2e22db4a"
+          },
+          {
+            "key": "0x441784802492e14bbd2f18f900c70323c52b5da8b5ad0e111695503f686d904",
+            "value": "0x11fe776abfabfa170c"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d020139bf42b8eb773"
+          },
+          {
+            "key": "0x39b007cbbc41dd4690791a49a6694bbdd30ad1e74fe84a7b3f37ce8b6bbb8a1",
+            "value": "0xfea782bf963786dbb397"
+          }
+        ]
+      },
+      {
+        "address": "0x3745ab04a431fc02871a139be6b93d9260b0ff3e779ad9c8b377183b23109f1",
+        "storage_entries": [
+          {
+            "key": "0x2006f263c87d92061db4b88b71f7b592e89c3333dbc26ca57aab5dae8455766",
+            "value": "0x2b8ef492ca7254c72067"
+          },
+          {
+            "key": "0x444e7f054b3e3aee576144bcb78c57e2ff89d69e4fe9bc98a7e6dabe04b7512",
+            "value": "0x67bee953"
+          },
+          {
+            "key": "0x50af20f6b78939b8e3a8a83076727c2050452ca2f5bbc56a901d4d7f4351e3e",
+            "value": "0x10bbcd2cad9f5a5cfea35c48c"
+          },
+          {
+            "key": "0x50af20f6b78939b8e3a8a83076727c2050452ca2f5bbc56a901d4d7f4351e3f",
+            "value": "0xbcf8f97aae32eab6c"
+          },
+          {
+            "key": "0x444e7f054b3e3aee576144bcb78c57e2ff89d69e4fe9bc98a7e6dabe04b7513",
+            "value": "0x1a055690d9db8000"
+          },
+          {
+            "key": "0x50af20f6b78939b8e3a8a83076727c2050452ca2f5bbc56a901d4d7f4351e42",
+            "value": "0x379e9c3c04dec8000"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86adb",
+            "value": "0x286deb664284bac9de2cdd0643bd1b68ab5a8d5d2e6ad21960f5eeeef68870c"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x7573e9ba6dc57227175a83918c7472309b893cabd22730e2babac3f6bcc254e",
+        "nonce": "0xf"
+      }
+    ]
+  }
+}

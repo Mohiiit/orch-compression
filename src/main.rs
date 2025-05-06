@@ -53,6 +53,7 @@ async fn main() -> Result<()> {
         eprintln!("  blob-to-dataJson <input_file> <output_file> - Convert a BigUint file to DataJson format");
         eprintln!("  compare-json <file1> <file2> <output_file> - Compare two DataJson files and output differences");
         eprintln!("  stateless-decompression <input_file> <output_file> - Decompress a BigUint file using stateless decompression");
+        eprintln!("  stateful-compression <input_file> <output_file> - Compress a merged state update using stateful compression");
         process::exit(1);
     }
     
@@ -575,6 +576,39 @@ async fn main() -> Result<()> {
             println!("Stateless decompression completed successfully");
         },
         
+        // Command: stateful-compression
+        "stateful-compression" => {
+            if args.len() < 4 {
+                eprintln!("Usage: orch-compression stateful-compression <input_file> <output_file>");
+                eprintln!("  input_file - JSON file containing merged state updates");
+                eprintln!("  output_file - File to write compressed state update to");
+                process::exit(1);
+            }
+            
+            let input_file = &args[2];
+            let output_file_name = &args[3];
+            
+            // Create output directory
+            let output_dir = "output/stateful-compression";
+            fs::create_dir_all(output_dir)?;
+            let output_file = format!("{}/{}", output_dir, output_file_name);
+            
+            println!("Reading merged state update from {}", input_file);
+            let file_content = fs::read_to_string(input_file)?;
+            
+            // Parse and compress
+            let compressed_update = compression::stateful_compress_state_update(&file_content)?;
+            
+            // Convert to JSON and write
+            let json_str = serde_json::to_string_pretty(&compressed_update)
+                .map_err(|e| color_eyre::eyre::eyre!("Failed to serialize compressed state update: {}", e))?;
+            
+            println!("Writing compressed state update to {}", output_file);
+            fs::write(output_file, json_str)?;
+            
+            println!("Stateful compression completed successfully");
+        },
+        
         // Unknown command handler
         _ => {
             eprintln!("Unknown command: {}", args[1]);
@@ -590,6 +624,7 @@ async fn main() -> Result<()> {
             eprintln!("  blob-to-dataJson <input_file> <output_file> - Convert a BigUint file to DataJson format");
             eprintln!("  compare-json <file1> <file2> <output_file> - Compare two DataJson files and output differences");
             eprintln!("  stateless-decompression <input_file> <output_file> - Decompress a BigUint file using stateless decompression");
+            eprintln!("  stateful-compression <input_file> <output_file> - Compress a merged state update using stateful compression");
             process::exit(1);
         }
     }

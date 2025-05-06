@@ -1,0 +1,71 @@
+{
+  "block_hash": "0x2a16bdbdffe2940b05b1643943e39e5e9aa9c6c840584fde531c23e150b1ca3",
+  "old_root": "0x1f6bc5dfbae5dc4ecd4bdfb6b01ebc6603c4a92c851d607147f9ae0181c01b",
+  "new_root": "0x11b549c31eea77542957f858281bfcf60a817fd6d7038a31e3a25b369f35999",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x28c62efb55444e72ba017fd975177c3960fc62a1c213713691dff28c0a81424",
+        "storage_entries": [
+          {
+            "key": "0x15b",
+            "value": "0x2e27ca50521b5514b9edeab0e259f31282de0d47c876578df6eb4220e85c6c0"
+          },
+          {
+            "key": "0x3d8",
+            "value": "0x408ea685cfb75f4611d934826db6048f13f1a188e0ec41dd90c3495c5daced7"
+          }
+        ]
+      },
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x14ef16ae40c3041a0d8a3f068e1bca0d2ea854cc59162bed84fcc492c70b7ac",
+            "value": "0x2b5e3abcdbf40cfc0"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f79fbc0b4d9b4867"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86bc5",
+            "value": "0x23d70f57ac4627a414976ee4c38a99b2fcc460d3d723a12f55f7a3fd26d215d"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x15b",
+            "value": "0x9eb"
+          },
+          {
+            "key": "0x0",
+            "value": "0x9ed"
+          },
+          {
+            "key": "0x3d8",
+            "value": "0x9ec"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x745d525a3582e91299d8d7c71730ffc4b1f191f5b219d800334bc0edad0983b",
+        "nonce": "0xf"
+      }
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "block_hash": "0x12f9173aeb20b7e20d9f0680516eff2fa6289041f03d19f310a29f94b8dab7",
+  "old_root": "0xf118bc82405ecf65837299a0b62750a1a9abb34cdd7fd4754bbca86437e1d3",
+  "new_root": "0x110e79e97ea8da43c072204bbe4c02783ae68809df751e26cd3cfbc172b8d17",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x2ebbebb8ceb2e07f30a5088f5849afd4f908f04f3f9c97c694e5d83d2a7cc61",
+        "storage_entries": [
+          {
+            "key": "0x206a9cfb3d896fb03428a7fae8533631e9b6f062c60d57149e0c9a961b4b1cf",
+            "value": "0x64db8d0f8fa754646aa"
+          },
+          {
+            "key": "0x384b51912a8b011d8b1e984eec1b750b6ce6bdcd9b4bfb0a67b80fa45a51238",
+            "value": "0x67bee362"
+          }
+        ]
+      },
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d01d0e84163882b9ae"
+          },
+          {
+            "key": "0x84a17db3276b7f8c33d3cdae9067d3db20b6a24b5c29fd185df2f7f42c0713",
+            "value": "0x22262003324d4823fde"
+          }
+        ]
+      },
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x5a75b9b1cc62955043179d3df5a54d4c8d172bd0b4307f3b05ed7a10816d300",
+            "value": "0x2b57a363bf145482e"
+          },
+          {
+            "key": "0x84a17db3276b7f8c33d3cdae9067d3db20b6a24b5c29fd185df2f7f42c0713",
+            "value": "0xec72b2ba6da28c"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f78a293ba996a1f0"
+          }
+        ]
+      },
+      {
+        "address": "0x3745ab04a431fc02871a139be6b93d9260b0ff3e779ad9c8b377183b23109f1",
+        "storage_entries": [
+          {
+            "key": "0x36ee765df10dd2684a64e385dd598871facdb8b2fcb9f007a155815c4a63393",
+            "value": "0x67bee362"
+          },
+          {
+            "key": "0x2100c1ca598e2d3776ea7972940e0aa4e83a7c049969cbb4bd414da2ce50fd5",
+            "value": "0x10bbbb993f9ce38e3b6d495ac"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86acb",
+            "value": "0x33f1040417df118d3d295568fea6426831b11c3329af720a4cd510aa42f84b"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x4a7876e03402cf253efdb3b17c760ee7349c7ec2876059b83ec2c92ca451e16",
+            "value": "0x10b"
+          },
+          {
+            "key": "0x5a75b9b1cc62955043179d3df5a54d4c8d172bd0b4307f3b05ed7a10816d300",
+            "value": "0x10a"
+          },
+          {
+            "key": "0x0",
+            "value": "0x10c"
+          },
+          {
+            "key": "0x84a17db3276b7f8c33d3cdae9067d3db20b6a24b5c29fd185df2f7f42c0713",
+            "value": "0x108"
+          },
+          {
+            "key": "0x472aa8128e01eb0df145810c9511a92852d62a68ba8198ce5fa414e6337a365",
+            "value": "0x109"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [
+      {
+        "class_hash": "0x5d4f123c53c7cfe4db2725ff77f52b7cc0293115175c4a6ae26b931bb33c973",
+        "compiled_class_hash": "0xc96e9f97365579383ef8edcae038bc50dfc94df26aead3ce46d269562854bd"
+      },
+      {
+        "class_hash": "0x76891d746eb329a0423fd1cb50054ecf6fb617a2a615622b85b491464c0c94d",
+        "compiled_class_hash": "0x4d91226e84143be2ac2f1d3b30867c26dd950da82b2b71ff8e0dae9d3426499"
+      }
+    ],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x472aa8128e01eb0df145810c9511a92852d62a68ba8198ce5fa414e6337a365",
+        "nonce": "0x10"
+      },
+      {
+        "contract_address": "0x4a7876e03402cf253efdb3b17c760ee7349c7ec2876059b83ec2c92ca451e16",
+        "nonce": "0x3788"
+      }
+    ]
+  }
+}

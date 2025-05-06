@@ -1,0 +1,67 @@
+{
+  "block_hash": "0x286deb664284bac9de2cdd0643bd1b68ab5a8d5d2e6ad21960f5eeeef68870c",
+  "old_root": "0x67d9d265684b5c507d72bb217e1e420f76370d60204ce8d37968e24fbe8c2e",
+  "new_root": "0x7f1848a06db0dbadc5fe984415ee38f16cda585a1e8ce2e018f35959927de28",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x5e529706944049bb2be637a26a4d78b32e554ecaa54d0e608f2fa9f1472c516",
+        "storage_entries": [
+          {
+            "key": "0x5705167d2cb6d7efed80dd7f41f83cdb8c8bc54b1aec6b0db28a39d7bc0ca03",
+            "value": "0x122ff46fca036e737bb1fa002bbfe3410f778108973eebc8b83a9eec2ff9563"
+          }
+        ]
+      },
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f78a9c144e767bce"
+          },
+          {
+            "key": "0x15a1987fd60bca3dd91c725dd4f7d12860b55ff205d525297bb291dbe20ad2d",
+            "value": "0x52cae8d958f1812c"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86ad1",
+            "value": "0x294d2812971927860556f2b6e8d9e9378120e6f27bf7903ddf7084cb28e7354"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x0",
+            "value": "0x13c"
+          },
+          {
+            "key": "0x15a1987fd60bca3dd91c725dd4f7d12860b55ff205d525297bb291dbe20ad2d",
+            "value": "0x13a"
+          },
+          {
+            "key": "0x55bdcd43cd9172d7aa0a328f28a8ec221ff16a39f5a793b2e7cf0bc2ebc631b",
+            "value": "0x13b"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x55bdcd43cd9172d7aa0a328f28a8ec221ff16a39f5a793b2e7cf0bc2ebc631b",
+        "nonce": "0x56c"
+      }
+    ]
+  }
+}

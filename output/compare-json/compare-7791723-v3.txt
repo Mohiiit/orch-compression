@@ -1,0 +1,30 @@
+# Comparison of State Updates
+
+State Update Summary:
+- Total contracts in first file: 559
+- Total contracts in second file: 559
+- Contracts only in first file: 0
+- Contracts only in second file: 0
+- Contracts with differences: 1
+
+## Contracts with differences
+
+### Contract Address: 2489
+- Storage update differences:
+  - Storage keys only in first file: 1
+  - Storage keys only in second file: 1
+  - Storage keys with different values: 0
+  - Details of storage keys only in first file:
+    - Key: 0, Value: 2881232327583988656348098936616183444287248090176373459173791493557945685046
+  - Details of storage keys only in second file:
+    - Key: 5224, Value: 2881232327583988656348098936616183444287248090176373459173791493557945685046
+
+
+# Comparison of Class Declarations
+
+Class Declaration Summary:
+- Total class declarations in first file: 96
+- Total class declarations in second file: 96
+- Class declarations only in first file: 0
+- Class declarations only in second file: 0
+

@@ -1,0 +1,125 @@
+{
+  "block_hash": "0x3aad3bd82dabda55aa3479bb2d5a695d4fcb11c88497b234e87ada93b9b22f2",
+  "old_root": "0x41e687e8b90ac4b97a2e1e9c58b626272f80abf501cc9f37898d831ff2e0c2",
+  "new_root": "0x18d230b4bce091145cc88a74d335d605e43b64520e19d70fcf68ab7a33598e",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x14ef16ae40c3041a0d8a3f068e1bca0d2ea854cc59162bed84fcc492c70b7ac",
+            "value": "0x21ca912dc18eaf903dd"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d1cd87426299f1057e"
+          }
+        ]
+      },
+      {
+        "address": "0x500c401aa2403a36d40bca5e005be4ecf98a7842906cf6590b860082f265b95",
+        "storage_entries": [
+          {
+            "key": "0x2ae55b793ea12eff3e20b7f6b6385b6c5d8f7fbf605645f62326b1047522ef6",
+            "value": "0x67bf19f7"
+          },
+          {
+            "key": "0x6020ca24761254b2d86c76e94659d256ee82850b47a052cd49230205ecc2c1a",
+            "value": "0x3c"
+          },
+          {
+            "key": "0x46f9c498a0afc9b723a3d18ef18926b10521cf8b271456c0c5bba2854ab8616",
+            "value": "0x6"
+          }
+        ]
+      },
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f7a20bac7a7bccdb"
+          },
+          {
+            "key": "0xd2d273c99da1c8e98e683213c4fa8f72c944aa1560ab4a1467e5a5d39fd7df",
+            "value": "0x4f08be126bfdf2ea8"
+          },
+          {
+            "key": "0x48893ef8569aea19a76f2f3b28ff84b8c102d940f799666ad606f7d7c063e0d",
+            "value": "0xaa1f472c3021"
+          }
+        ]
+      },
+      {
+        "address": "0x34ed4d6f693aff5e7a6e66f75bee79051b2c10e02d4f61be370d08f7bc00ae0",
+        "storage_entries": [
+          {
+            "key": "0x25acad4a93ae2cf4eeea0f97e43c00d02cc0ccecc3a0a171ae0682037be0b29",
+            "value": "0x1f5fb232ba245fb5a44f5"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x46f9c498a0afc9b723a3d18ef18926b10521cf8b271456c0c5bba2854ab8616",
+            "value": "0xa51"
+          },
+          {
+            "key": "0x0",
+            "value": "0xa54"
+          },
+          {
+            "key": "0x6020ca24761254b2d86c76e94659d256ee82850b47a052cd49230205ecc2c1a",
+            "value": "0xa52"
+          },
+          {
+            "key": "0x49ccd72b68434817fd572d9992603a0644c9373202bb0aedb4c571e279ccf2c",
+            "value": "0xa4e"
+          },
+          {
+            "key": "0x48893ef8569aea19a76f2f3b28ff84b8c102d940f799666ad606f7d7c063e0d",
+            "value": "0xa4f"
+          },
+          {
+            "key": "0x500c401aa2403a36d40bca5e005be4ecf98a7842906cf6590b860082f265b95",
+            "value": "0xa53"
+          },
+          {
+            "key": "0x2ae55b793ea12eff3e20b7f6b6385b6c5d8f7fbf605645f62326b1047522ef6",
+            "value": "0xa50"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86bee",
+            "value": "0x62512daec110e683cf801aea2cc9798cb0a90cc09c0c6103a1d0de4e43efe2c"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0xf9e998b2853e6d01f3ae3c598c754c1b9a7bd398fec7657de022f3b778679",
+        "nonce": "0x886d"
+      },
+      {
+        "contract_address": "0x49ccd72b68434817fd572d9992603a0644c9373202bb0aedb4c571e279ccf2c",
+        "nonce": "0x7"
+      },
+      {
+        "contract_address": "0x745d525a3582e91299d8d7c71730ffc4b1f191f5b219d800334bc0edad0983b",
+        "nonce": "0x2c"
+      }
+    ]
+  }
+}

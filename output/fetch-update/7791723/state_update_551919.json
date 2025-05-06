@@ -1,0 +1,71 @@
+{
+  "block_hash": "0x44d1a7dfb7d024cbdef5d6bfc24658cbb4f8562edfbd9d5230ca9b6d49242bc",
+  "old_root": "0x3fbc93f2188b4805ca1b81d88a140d8918a0ab5fd14e30a092d189de7b7f3f0",
+  "new_root": "0x2e13462340efff8914b0a9e26bf82129f32a27cd583b63f0f6f1f9e15deb690",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x12d400242a4f59b144666adf62f177f7e3a672932d5a2cae92f58488240bdb6",
+        "storage_entries": [
+          {
+            "key": "0x206f38f7e4f15e87567361213c28f235cccdaa1d7fd34c9db1dfe9489c6a091",
+            "value": "0x12c"
+          },
+          {
+            "key": "0x10bab9be2f71a5d978cf69e97cb39574357f6c484bb00f76073861cbf753abf",
+            "value": "0x7b"
+          }
+        ]
+      },
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0xd2d273c99da1c8e98e683213c4fa8f72c944aa1560ab4a1467e5a5d39fd7df",
+            "value": "0x4f09dc0a29d35aeab"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f7a1e3f453dbad3c"
+          }
+        ]
+      },
+      {
+        "address": "0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
+        "storage_entries": [
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x1d8d1cbcd6d2597096c7a"
+          },
+          {
+            "key": "0x14ef16ae40c3041a0d8a3f068e1bca0d2ea854cc59162bed84fcc492c70b7ac",
+            "value": "0x21caaccb155ede09ce1"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86be5",
+            "value": "0xb2168c6841e34c53ee57fb3c4f145924e4c0fc0e1df415f48c11ca1f006a75"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x745d525a3582e91299d8d7c71730ffc4b1f191f5b219d800334bc0edad0983b",
+        "nonce": "0x27"
+      },
+      {
+        "contract_address": "0xf9e998b2853e6d01f3ae3c598c754c1b9a7bd398fec7657de022f3b778679",
+        "nonce": "0x8853"
+      }
+    ]
+  }
+}

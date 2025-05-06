@@ -1,0 +1,66 @@
+{
+  "block_hash": "0x779529e948376e03ad11ece9c78f2a731dd6b7c9befb63a8e86c1c778312cea",
+  "old_root": "0x6ee1c482e80baaa44978262e91546e72b5231356d166f1fd929d1c4ab457c4",
+  "new_root": "0x79b50471cb4bb0a3952fc9c0bdd52025ee92bb65f73edca17ca7352e816ae68",
+  "state_diff": {
+    "storage_diffs": [
+      {
+        "address": "0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+        "storage_entries": [
+          {
+            "key": "0xd2d273c99da1c8e98e683213c4fa8f72c944aa1560ab4a1467e5a5d39fd7df",
+            "value": "0x4f08bf93138348bc9"
+          },
+          {
+            "key": "0x3700469652511fc899eb73feaed6e2b04f72152894891696d1bafd537bd6765",
+            "value": "0x11c37937e08000"
+          },
+          {
+            "key": "0x14ef16ae40c3041a0d8a3f068e1bca0d2ea854cc59162bed84fcc492c70b7ac",
+            "value": "0x2b5e3a583dcf06ea9"
+          },
+          {
+            "key": "0x5496768776e3db30053404f18067d81a6e06f5a2b0de326e21298fd9d569a9a",
+            "value": "0x29f7a1e90878b05b9d"
+          }
+        ]
+      },
+      {
+        "address": "0x1",
+        "storage_entries": [
+          {
+            "key": "0x86be7",
+            "value": "0x66c8f5719569cb67782f31701fb8f771cbe9046888f7c9d80df23d9938d1959"
+          }
+        ]
+      },
+      {
+        "address": "0x2",
+        "storage_entries": [
+          {
+            "key": "0x3700469652511fc899eb73feaed6e2b04f72152894891696d1bafd537bd6765",
+            "value": "0xa3f"
+          },
+          {
+            "key": "0x0",
+            "value": "0xa40"
+          }
+        ]
+      }
+    ],
+    "deprecated_declared_classes": [],
+    "declared_classes": [],
+    "deployed_contracts": [],
+    "replaced_classes": [],
+    "nonces": [
+      {
+        "contract_address": "0x745d525a3582e91299d8d7c71730ffc4b1f191f5b219d800334bc0edad0983b",
+        "nonce": "0x28"
+      },
+      {
+        "contract_address": "0xf9e998b2853e6d01f3ae3c598c754c1b9a7bd398fec7657de022f3b778679",
+        "nonce": "0x8859"
+      }
+    ]
+  }
+}
